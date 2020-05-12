@@ -1,0 +1,167 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Info boxes -->
+<div class="row">
+    <div class="col-12 col-sm-6 col-md-6">
+        <div class="info-box">
+            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-dice"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Active poker boards</span>
+                <span class="info-box-number">
+                    10
+                    @*<small>%</small>*@
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-6">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-danger elevation-1"><i class=" far fa-comments"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Active retrospective boards</span>
+                <span class="info-box-number">3</span>
+            </div>
+            <!-- /.info-box-content-->
+        </div>
+        <!-- /.info-box-->
+    </div>
+    <!-- /.col-->
+</div>
+
+<div class="row">
+    <!-- Left col -->
+    <div class="col-md-8">
+        <!-- Jira Details -->
+        <div class="card card-primary card-outline">
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="Jira">Jira #</label>
+                    <input type="text" name="Jira" class="form-control" placeholder="Enter Jira Number">
+                </div>
+                <div class="form-group">
+                    <label for="Description">Description</label>
+                    <textarea class="form-control" name="Description" rows="6" placeholder="Description"></textarea>
+                </div>
+            </div>
+        </div> <!--/.card-->
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Record Vote</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <ul class="users-list clearfix">
+                    <li>
+                        <img class="glow-img" src="~/img/1.png" alt="1">
+                        <a class="users-list-name" href="#">One</a>
+                    </li>
+                    <li>
+                        <img class="glow-img" src="~/img/2.png" alt="2">
+                        <a class="users-list-name" href="#">Two</a>
+                    </li>
+                    <li>
+                        <img class="glow-img" src="~/img/3.png" alt="3">
+                        <a class="users-list-name" href="#">Three</a>
+                    </li>
+                    <li>
+                        <img class="glow-img" src="~/img/5.png" alt="5">
+                        <a class="users-list-name" href="#">Five</a>
+                    </li>
+                    <li>
+                        <img class="glow-img" src="~/img/8.png" alt="8">
+                        <a class="users-list-name" href="#">Eight</a>
+                    </li>
+                    <li>
+                        <img class="glow-img" src="~/img/100.png" alt="100">
+                        <a class="users-list-name" href="#">I have no idea!</a>
+                    </li>
+                </ul>
+                <!-- /.vote-list -->
+            </div>
+        </div> <!-- /.record vote-->
+    </div>
+
+    <div class="col-md-4">
+        <!-- About Me Box -->
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Board details</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <b>Board ID</b> <a class="float-right">56894</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Owner</b> <a class="float-right">Ani Murthy</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>User Name</b> <a class="float-right">Ani Murthy (# 536)</a>
+                    </li>
+                </ul>
+
+                <table class="table" id="tableUsers">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        <tr class="is-valid">
+                            <td>James</td>
+                            <td>Voter</td>
+                        </tr>
+                        <tr>
+                            <td>Robert</td>
+                            <td>Voter</td>
+                        </tr>
+                        <tr id="123">
+                            <td>Ani Murthy</td>
+                            <td>Oberserver</td>
+                        </tr>
+                        <tr>
+                            <td>Nielson</td>
+                            <td>Voter</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="card-footer">
+                    <button type="button" class="btn btn-success float-left" style="margin-right: 5px;" onclick="addrow();">Add Row</button>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    function addrow() {
+        debugger;
+        var tbody = document.getElementById('tbody'), row, name, type;
+        row = tbody.insertRow(0);
+        name = row.insertCell(0);
+        type = row.insertCell(1);
+        name.innerHTML = 'Test User';
+        type.innerHTML = 'It Works!';
+    }
+
+        $(document).ready(function(){
+            $(".glow-img").click(function () {
+                $("#123").addClass("highlight-green",1000, "easeOutBounce");
+            });
+        });
+</script>

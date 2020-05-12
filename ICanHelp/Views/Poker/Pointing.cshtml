@@ -1,0 +1,186 @@
+﻿@model ICanHelp.Contracts.PointingTableDom
+
+@{
+    ViewData["Title"] = "Story Pointing Table";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <!-- Left col -->
+    <div class="col-md-8">
+        <!-- Jira Details -->
+        <div class="card card-success">
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="Jira">Jira #</label>
+                    <input type="text" name="Jira" class="form-control" placeholder="Enter Jira Number">
+                </div>
+                <div class="form-group">
+                    <label for="Description">Description</label>
+                    <textarea class="form-control" name="Description" rows="6" placeholder="Description"></textarea>
+                </div>
+            </div>
+        </div> <!--/.card-->
+
+        @if (Model.CurrentUser.IsVoting)
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Record Vote</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body p-0">
+                    <ul class="users-list clearfix">
+                        <li>
+                            <img class="glow-img" src="~/img/1.png" id="1" alt="1">
+                            <a class="users-list-name" href="#">One</a>
+                        </li>
+                        <li>
+                            <img class="glow-img" src="~/img/2.png" id="2" alt="2">
+                            <a class="users-list-name" href="#">Two</a>
+                        </li>
+                        <li>
+                            <img class="glow-img" src="~/img/3.png" id="3" alt="3">
+                            <a class="users-list-name" href="#">Three</a>
+                        </li>
+                        <li>
+                            <img class="glow-img" src="~/img/5.png" id="5" alt="5">
+                            <a class="users-list-name" href="#">Five</a>
+                        </li>
+                        <li>
+                            <img class="glow-img" src="~/img/8.png" id="8" alt="8">
+                            <a class="users-list-name" href="#">Eight</a>
+                        </li>
+                        <li>
+                            <img class="glow-img" src="~/img/100.png" id="100" alt="100">
+                            <a class="users-list-name" href="#">I have no idea!</a>
+                        </li>
+                    </ul>
+                    <!-- /.vote-list -->
+                </div>
+            </div> <!-- /.record vote-->
+        }
+    </div>
+    <!--Right col-->
+    <div class="col-md-4">
+        <!-- About Me Box -->
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Board details</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <b>Table #</b> <a class="float-right">@Model.Id</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Team Name</b> <a class="float-right">@Model.Name</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Owner</b> <a class="float-right">@Model.Owner.Name</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>User Name</b> <a class="float-right">@Model.CurrentUser.Name (# @Model.CurrentUser.Id)</a>
+                    </li>
+                </ul>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyUsers">
+                        @foreach (var item in Model.Users)
+                        {
+                            <tr id="@Html.DisplayFor(modelitem => item.Id)">
+                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                @if (item.IsVoting)
+                                {
+                                    <td>Voter</td>
+                                }
+                                else
+                                {
+                                    <td>Oberver</td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <b>Status</b> <a class="float-right" id="lblStatus"></a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    var connection = new signalR.HubConnectionBuilder().withUrl("/pokerhub").build();
+
+    connection.start().then(function () {
+       // document.getElementById("spnStatus").innerText = "Connected!";
+        document.getElementById("lblStatus").innerText = "Connected!";
+
+
+        if (connection.state === signalR.HubConnectionState.Connected) {
+              connection.invoke('SubscribeToBoard', @Html.DisplayFor(model=>model.Id))
+                .then(function () {
+                   // document.getElementById("spnStatus").innerText = "Subscribed!";
+                     document.getElementById("lblStatus").innerText = "Subscribed!";
+                    // Send the connectionId to controller
+                }).catch(err => console.error(err.toString()));;
+        }
+
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
+
+    connection.on("UserAdded", function (user) {
+        var userName = user.name;
+        var tbody = document.getElementById('tbodyUsers'), row, name, type;
+
+        document.getElementById("lblStatus").innerText = "New User!";
+
+        row = tbody.insertRow();
+        row.id=user.id
+        name = row.insertCell(0);
+         type = row.insertCell(1);
+        name.innerHTML = userName;
+        if(user.isVoting)
+            type.innerHTML = 'Voter';
+        else
+            type.innerHTML = 'Observer';
+
+    });
+
+    /*On selecting an vote */
+    $(document).ready(function(){
+        $(".glow-img").click(function () {
+            $.ajax({
+                headers:{
+                    "Accept":"application/json",//depends on your api
+                    "Content-type":"application/x-www-form-urlencoded"//depends on your api
+                },   url:"/api/PokerApi/Vote/"+@Model.CurrentUser.Id+"?vote="+this.id,
+            success:function(response){
+                var r = JSON.parse(response);
+                $("#@Model.CurrentUser.Id").addClass("highlight-green");
+                }
+            });
+        });
+    });
+
+    connection.on("Voted", function (userId) {
+        alert("Voted"+userId);
+        var row = "#" + userId;
+        $(row).addClass("highlight-green");
+    });
+</script>
