@@ -1,2 +1,4 @@
 *.dll
 */bin
+*/obj
+.vs
