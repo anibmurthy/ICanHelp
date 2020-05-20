@@ -248,7 +248,7 @@
                 headers:{
                     "Accept":"application/json",//depends on your api
                     "Content-type":"application/x-www-form-urlencoded"//depends on your api
-                },   url:"/api/PokerApi/NextRound/"+@Model.Id"?userid="@Model.CurrentUser.Id,
+                },   url:"/api/PokerApi/NextRound/"+@Model.Id+"?userid="+@Model.CurrentUser.Id,
             success:function(response){
                 //var r = JSON.parse(response);
                 ResetPage(@Model.CurrentUser.Id);
