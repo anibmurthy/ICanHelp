@@ -54,7 +54,16 @@ namespace ICanHelp.Controllers
             }
 
             _cache.Set(table.Id, table);
-            await _hub.Clients.Group(table.Id.ToString()).SendAsync("Voted", userId, vote);
+            string clientId = Request.Headers["x-conn-id"];
+            if (string.IsNullOrWhiteSpace(clientId))
+            {
+                await _hub.Clients.Group(table.Id.ToString()).SendAsync("Voted", userId, vote);
+            }
+            else
+            {
+                await _hub.Clients.GroupExcept(table.Id.ToString(), clientId).SendAsync("Voted", userId, vote);
+            }
+
             if (table.VotesRecorded == table.TotalVoters)
             {
                 await _hub.Clients.Group(table.Id.ToString()).SendAsync("ShowResults", CalculateResult(table));
@@ -149,9 +158,33 @@ namespace ICanHelp.Controllers
 
             _cache.Set(tableId, table);
 
-            await _hub.Clients.Group(table.Id.ToString()).SendAsync("ResetPage", userId);
+            string clientId = Request.Headers["x-conn-id"];
+            if (string.IsNullOrWhiteSpace(clientId))
+            {
+                await _hub.Clients.Group(table.Id.ToString()).SendAsync("ResetPage", userId);
+            }
+            else
+            {
+                await _hub.Clients.GroupExcept(table.Id.ToString(), clientId).SendAsync("ResetPage", userId);
+            }
 
             return Ok("Table cleared");
+        }
+
+        [HttpGet]
+        [Route("UpdateJira/{tableId}")]
+        public async Task<IActionResult> UpdateJira(string tableId, string data)
+        {
+            await _hub.Clients.GroupExcept(tableId, Request.Headers["x-conn-id"]).SendAsync("UpdateJira", data);
+            return Ok($"Server received Jira: {data}");
+        }
+
+        [HttpGet]
+        [Route("UpdateDesc/{tableId}")]
+        public async Task<IActionResult> UpdateDesc(string tableId, string data)
+        {
+            await _hub.Clients.GroupExcept(tableId, Request.Headers["x-conn-id"]).SendAsync("UpdateDesc", data);
+            return Ok($"Server received Desc: {data}");
         }
     }
 }

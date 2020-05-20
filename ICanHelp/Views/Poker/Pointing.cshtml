@@ -16,14 +16,14 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="Jira">Jira #</label>
-                            <input type="text" name="Jira" class="form-control" placeholder="Enter Jira Number">
+                            <input type="text" name="Jira" id="txtJira" class="form-control" onkeypress="UpdateJira(this.value);" placeholder="Enter Jira Number">
                         </div>
                         <div class="form-group">
                             <label for="Description">Description</label>
-                            <textarea class="form-control" name="Description" rows="5" placeholder="Description"></textarea>
+                            <textarea class="form-control" name="Description" id="txtDesc" onkeypress="UpdateDesc(this.value);" rows="5" placeholder="Description"></textarea>
                         </div>
                         <div class="form-group">
-                            <button type="button" class="btn btn-success float-left" style="margin-right: 5px;" onclick="ShoeVotes();">Show Votes</button>
+                            <button type="button" class="btn btn-success float-left" style="margin-right: 5px;" onclick="ShowVotes();">Show Votes</button>
                             <button type="button" class="btn btn-primary float-left" style="margin-right: 5px;" onclick="NextRound();">Next Round</button>
                         </div>
                     </div>
@@ -149,6 +149,7 @@
 <script src="~/js/chart.js/Chart.min.js"></script>
 <script>
     var connection = new signalR.HubConnectionBuilder().withUrl("/pokerhub").build();
+    var connId;
 
     connection.start().then(function () {
         document.getElementById("lblStatus").innerText = "Connected!";
@@ -156,12 +157,21 @@
         if (connection.state === signalR.HubConnectionState.Connected) {
               connection.invoke('SubscribeToBoard', @Html.DisplayFor(model=>model.Id))
                 .then(function () {
-                     document.getElementById("lblStatus").innerText = "Subscribed!";
-                    // Send the connectionId to controller
+                    document.getElementById("lblStatus").innerText = "Subscribed!";
                 }).catch(err => console.error(err.toString()));;
         }
     }).catch(function (err) {
         return console.error(err.toString());
+    });
+
+    connection.on("SetConnectionId", function (data) {
+        connId = data;
+        console.log("SetConnectionId triggered: "+data);
+    });
+
+    connection.on("Message", function (data) {
+        connId = data;
+        console.log("Message triggered: "+data);
     });
 
     connection.onclose(function (e) {
@@ -194,13 +204,50 @@
         type.appendChild(voteSpan);
     });
 
+    function UpdateJira(data) {
+            $.ajax({
+                headers:{
+                    "Accept":"application/json",//depends on your api
+                    "Content-type": "application/x-www-form-urlencoded", //depends on your api
+                    'test-header': 'test Value',
+                    'x-conn-id': connId
+                },   url:"/api/PokerApi/UpdateJira/"+@Model.Id+"?data="+data,
+                success: function (response) {
+                    console.log(response);
+                }
+            });
+    }
+
+    connection.on("UpdateJira", function (data) {
+       document.getElementById("txtJira").value = data;
+    });
+
+    function UpdateDesc(data) {
+        $.ajax({
+                headers:{
+                    "Accept":"application/json",//depends on your api
+                    "Content-type": "application/x-www-form-urlencoded", //depends on your api
+                    'test-header': 'test Value',
+                    'x-conn-id': connId
+                },   url:"/api/PokerApi/UpdateDesc/"+@Model.Id+"?data="+data,
+                success: function (response) {
+                    console.log(response);
+                }
+         });
+    }
+
+    connection.on("UpdateDesc", function (data) {
+       document.getElementById("txtDesc").value = data;
+    });
+
     /*On selecting an vote */
     $(document).ready(function(){
         $(".glow-img").click(function () {
             $.ajax({
                 headers:{
                     "Accept":"application/json",//depends on your api
-                    "Content-type":"application/x-www-form-urlencoded"//depends on your api
+                    "Content-type": "application/x-www-form-urlencoded",//depends on your api
+                     'x-conn-id': connId
                 },   url:"/api/PokerApi/Vote/"+@Model.CurrentUser.Id+"?vote="+this.id,
             success:function(response){
                 var r = JSON.parse(response);
@@ -246,8 +293,9 @@
     function NextRound() {
         $.ajax({
                 headers:{
-                    "Accept":"application/json",//depends on your api
-                    "Content-type":"application/x-www-form-urlencoded"//depends on your api
+                 "Accept":"application/json",//depends on your api
+                 "Content-type": "application/x-www-form-urlencoded",//depends on your api
+                 'x-conn-id': connId
                 },   url:"/api/PokerApi/NextRound/"+@Model.Id+"?userid="+@Model.CurrentUser.Id,
             success:function(response){
                 //var r = JSON.parse(response);

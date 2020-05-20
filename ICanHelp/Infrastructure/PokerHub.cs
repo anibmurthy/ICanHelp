@@ -17,6 +17,7 @@ namespace ICanHelp.Infrastructure
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, boardId.ToString());
             await Clients.Caller.SendAsync("Message", "Added to board successfully!");
+            await Clients.Caller.SendAsync("SetConnectionId", Context.ConnectionId);
         }
 
         public async Task RemoveFromBoard(int boardId)
@@ -24,6 +25,5 @@ namespace ICanHelp.Infrastructure
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, boardId.ToString());
             await Clients.Caller.SendAsync("Message", "Removed from board successfully!");
         }
-
     }
 }
