@@ -8,51 +8,72 @@
 <div class="row">
     <!-- Left col -->
     <div class="col-md-8">
-        <!-- Jira Details -->
-        <div class="card card-success">
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="Jira">Jira #</label>
-                    <input type="text" name="Jira" class="form-control" placeholder="Enter Jira Number">
-                </div>
-                <div class="form-group">
-                    <label for="Description">Description</label>
-                    <textarea class="form-control" name="Description" rows="6" placeholder="Description"></textarea>
-                </div>
+        <div class="row">
+            <div class="col-md-12" id="divDetails">
+                <!-- Jira Details -->
+                <div class="card card-primary card-outline">
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="Jira">Jira #</label>
+                            <input type="text" name="Jira" class="form-control" placeholder="Enter Jira Number">
+                        </div>
+                        <div class="form-group">
+                            <label for="Description">Description</label>
+                            <textarea class="form-control" name="Description" rows="5" placeholder="Description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-success float-left" style="margin-right: 5px;" onclick="ShoeVotes();">Show Votes</button>
+                            <button type="button" class="btn btn-primary float-left" style="margin-right: 5px;" onclick="NextRound();">Next Round</button>
+                        </div>
+                    </div>
+                </div> <!--/.card-->
             </div>
-        </div> <!--/.card-->
+            <div class="col-md-6" style="display: none;" id="divResults">
+                <div class="card card-success">
+                    <div class="card-header">
+                        <h3 class="card-title">Result</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="resultChart" style="min-height: 262px; height: 262px; max-height: 262px; max-width: 100%;"></canvas>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
 
         @if (Model.CurrentUser.IsVoting)
         {
-            <div class="card">
+            <div class="card card-outline">
                 <div class="card-header">
                     <h3 class="card-title">Record Vote</h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body p-0">
-                    <ul class="users-list clearfix">
+                    <ul class="points-list clearfix">
                         <li>
-                            <img class="glow-img" src="~/img/1.png" id="1" alt="1">
+                            <img class="glow-img" src="~/img/1.png" id="1">
                             <a class="users-list-name" href="#">One</a>
                         </li>
                         <li>
-                            <img class="glow-img" src="~/img/2.png" id="2" alt="2">
+                            <img class="glow-img" src="~/img/2.png" id="2">
                             <a class="users-list-name" href="#">Two</a>
                         </li>
                         <li>
-                            <img class="glow-img" src="~/img/3.png" id="3" alt="3">
+                            <img class="glow-img" src="~/img/3.png" id="3">
                             <a class="users-list-name" href="#">Three</a>
                         </li>
                         <li>
-                            <img class="glow-img" src="~/img/5.png" id="5" alt="5">
+                            <img class="glow-img" src="~/img/5.png" id="5">
                             <a class="users-list-name" href="#">Five</a>
                         </li>
                         <li>
-                            <img class="glow-img" src="~/img/8.png" id="8" alt="8">
+                            <img class="glow-img" src="~/img/8.png" id="8">
                             <a class="users-list-name" href="#">Eight</a>
                         </li>
                         <li>
-                            <img class="glow-img" src="~/img/100.png" id="100" alt="100">
+                            <img class="glow-img" src="~/img/100.png" id="100">
                             <a class="users-list-name" href="#">I have no idea!</a>
                         </li>
                     </ul>
@@ -61,6 +82,7 @@
             </div> <!-- /.record vote-->
         }
     </div>
+
     <!--Right col-->
     <div class="col-md-4">
         <!-- About Me Box -->
@@ -89,22 +111,21 @@
                     <thead>
                         <tr>
                             <th>User</th>
-                            <th>Type</th>
+                            <th>Point</th>
                         </tr>
                     </thead>
                     <tbody id="tbodyUsers">
                         @foreach (var item in Model.Users)
                         {
                             <tr id="@Html.DisplayFor(modelitem => item.Id)">
-                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                                @if (item.IsVoting)
-                                {
-                                    <td>Voter</td>
-                                }
-                                else
-                                {
-                                    <td>Oberver</td>
-                                }
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                    @if (item.IsVoting)
+                                    {<small>(voter)</small>}
+                                    else
+                                    {<small>(observer)</small>}
+                                </td>
+                                <td><span id="@Html.DisplayFor(modelitem => item.Id)spn" class="vote-value" style="display:none">-</span></td>
                             </tr>
                         }
                     </tbody>
@@ -122,26 +143,29 @@
 </div>
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- jQuery -->
+<script src="~/js/jquery/jquery.min.js"></script>
+<!-- ChartJS -->
+<script src="~/js/chart.js/Chart.min.js"></script>
 <script>
     var connection = new signalR.HubConnectionBuilder().withUrl("/pokerhub").build();
 
     connection.start().then(function () {
-       // document.getElementById("spnStatus").innerText = "Connected!";
         document.getElementById("lblStatus").innerText = "Connected!";
-
 
         if (connection.state === signalR.HubConnectionState.Connected) {
               connection.invoke('SubscribeToBoard', @Html.DisplayFor(model=>model.Id))
                 .then(function () {
-                   // document.getElementById("spnStatus").innerText = "Subscribed!";
                      document.getElementById("lblStatus").innerText = "Subscribed!";
                     // Send the connectionId to controller
                 }).catch(err => console.error(err.toString()));;
         }
-
     }).catch(function (err) {
         return console.error(err.toString());
+    });
+
+    connection.onclose(function (e) {
+         document.getElementById("lblStatus").innerText = "Connection Lost!";
     });
 
     connection.on("UserAdded", function (user) {
@@ -153,13 +177,21 @@
         row = tbody.insertRow();
         row.id=user.id
         name = row.insertCell(0);
-         type = row.insertCell(1);
-        name.innerHTML = userName;
-        if(user.isVoting)
-            type.innerHTML = 'Voter';
-        else
-            type.innerHTML = 'Observer';
+        type = row.insertCell(1);
 
+        if (user.isVoting) {
+            name.innerHTML = userName + " <small>(voter)</small>";
+        }
+        else {
+            name.innerHTML = userName +" <small>(observer)</small>";
+        }
+        var voteSpan = document.createElement('span');
+        voteSpan.id = user.id + "spn";
+        voteSpan.className = "vote-value";
+        voteSpan.style.display = "none";
+        voteSpan.value = "-";
+
+        type.appendChild(voteSpan);
     });
 
     /*On selecting an vote */
@@ -172,15 +204,68 @@
                 },   url:"/api/PokerApi/Vote/"+@Model.CurrentUser.Id+"?vote="+this.id,
             success:function(response){
                 var r = JSON.parse(response);
-                $("#@Model.CurrentUser.Id").addClass("highlight-green");
+                $("#@Model.CurrentUser.Id").addClass("highlight-green", 500);
                 }
             });
+            $("#" +@Model.CurrentUser.Id+ "spn").html(this.id);
+            $("#" +@Model.CurrentUser.Id+ "spn").css('display', 'block');
         });
     });
 
-    connection.on("Voted", function (userId) {
-        alert("Voted"+userId);
+    connection.on("Voted", function (userId, vote) {
         var row = "#" + userId;
         $(row).addClass("highlight-green");
+         $("#" +userId+ "spn").html(vote);
     });
+
+    connection.on("ShowResults", function (data) {
+        $("#divDetails").switchClass("col-md-12", "col-md-6", 1000, showResults);
+        FillPieChart(data);
+        $(".vote-value").css('display', 'block');
+    });
+
+    function showResults() {
+        $('#divResults').show(1000, "swing");
+    }
+
+    function FillPieChart(data) {
+        var resultChartCanvas = $('#resultChart').get(0).getContext('2d');
+        var donutOptions = {
+            maintainAspectRatio: false,
+            responsive: true,
+        }
+        //Create pie or douhnut chart
+        // You can switch between pie and douhnut using the method below.
+        var resultChart = new Chart(resultChartCanvas, {
+            type: 'doughnut',
+            data: data,
+            options: donutOptions
+        });
+    }
+
+    function NextRound() {
+        $.ajax({
+                headers:{
+                    "Accept":"application/json",//depends on your api
+                    "Content-type":"application/x-www-form-urlencoded"//depends on your api
+                },   url:"/api/PokerApi/NextRound/"+@Model.Id"?userid="@Model.CurrentUser.Id,
+            success:function(response){
+                //var r = JSON.parse(response);
+                ResetPage(@Model.CurrentUser.Id);
+             }
+         });
+    }
+
+    connection.on("ResetPage", function (userid) { ResetPage(userid) });
+
+    function ResetPage(userid) {
+        $(".vote-value").css('display', 'none');
+        $(".highlight-green").removeClass("highlight-green");
+        $('#divResults').hide(1000, "swing", shrinkDetails);
+        document.getElementById("lblStatus").innerText = "Table cleared by user:"+userid;
+    }
+
+    function shrinkDetails() {
+         $("#divDetails").switchClass("col-md-6", "col-md-12", 1000);
+    }
 </script>

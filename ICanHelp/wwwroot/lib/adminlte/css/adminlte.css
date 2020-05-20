@@ -32279,3 +32279,26 @@ a.text-muted:hover {
 table .highlight-green {
     background-color: #35d60d;
 }
+
+.points-list {
+    padding-left: 0;
+    list-style: none;
+}
+
+    .points-list > li {
+        float: left;
+        padding: 10px;
+        text-align: center;
+        width: 25%;
+    }
+
+        .points-list > li img {
+            border-radius: 25%;
+            height: auto;
+            max-width: 50%;
+        }
+
+        .points-list > li > a:hover,
+        .points-list > li > a:hover .users-list-name {
+            color: #999;
+        }
