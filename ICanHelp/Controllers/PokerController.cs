@@ -32,6 +32,11 @@ namespace ICanHelp.Controllers
         [HttpPost]
         public ActionResult Create(CreateTable request)
         {
+            if (request == null)
+            {
+                return View("Index");
+            }
+
             //Create new poker table
             PointingTable table = new PointingTable();
 
@@ -65,6 +70,11 @@ namespace ICanHelp.Controllers
         [HttpPost]
         public async Task<IActionResult> Join(JoinTable request)
         {
+            if (request == null)
+            {
+                return View("Index");
+            }
+
             //Pull table and add user to it
             PointingTable table = _cache.Get<PointingTable>(request.TableId);
 

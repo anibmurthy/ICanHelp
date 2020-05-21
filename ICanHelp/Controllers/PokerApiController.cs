@@ -113,7 +113,7 @@ namespace ICanHelp.Controllers
                         break;
                     case 3:
                         result.Labels.Add("Three");
-                        dataset.backgroundColor.Add("#f39c12");
+                        dataset.backgroundColor.Add("#6a2af5"); // #f39c12 - Brown
                         dataset.data.Add(entry.Value);
                         break;
                     case 5:
