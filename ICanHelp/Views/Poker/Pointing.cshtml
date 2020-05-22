@@ -24,7 +24,7 @@
                         </div>
                         <div class="form-group">
                             <button type="button" class="btn btn-success float-left" style="margin-right: 5px;" disabled onclick="ShowVotes();">Show Votes</button>
-                            <button type="button" class="btn btn-primary float-left" style="margin-right: 5px;" onclick="NextRound();">Next Round</button>
+                            <button type="button" class="btn btn-primary float-left" style="margin-right: 5px;" onclick="NextRound();">Next Story</button>
                         </div>
                     </div>
                 </div> <!--/.card-->
@@ -34,8 +34,8 @@
                     <div class="card-header">
                         <h3 class="card-title">Report</h3>
                     </div>
-                    <div class="card-body">
-                        <canvas id="resultChart" style="min-height: 284px; height: 284px; max-height: 284px; max-width: 100%;"></canvas>
+                    <div class="card-body" id="chartDiv">
+                        <!--Result chart is added here-->
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -45,41 +45,41 @@
 
         @if (Model.CurrentUser.IsVoting)
         {
-        <div class="card card-success">
-            <div class="card-header">
-                <h3 class="card-title">Pointing Options</h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body p-0">
-                <ul class="points-list clearfix">
-                    <li>
-                        <img class="glow-img" src="~/img/1.png" id="1">
-                        <a class="users-list-name" href="#">One</a>
-                    </li>
-                    <li>
-                        <img class="glow-img" src="~/img/2.png" id="2">
-                        <a class="users-list-name" href="#">Two</a>
-                    </li>
-                    <li>
-                        <img class="glow-img" src="~/img/3.png" id="3">
-                        <a class="users-list-name" href="#">Three</a>
-                    </li>
-                    <li>
-                        <img class="glow-img" src="~/img/5.png" id="5">
-                        <a class="users-list-name" href="#">Five</a>
-                    </li>
-                    <li>
-                        <img class="glow-img" src="~/img/8.png" id="8">
-                        <a class="users-list-name" href="#">Eight</a>
-                    </li>
-                    <li>
-                        <img class="glow-img" src="~/img/100.png" id="100">
-                        <a class="users-list-name" href="#">I have no idea!</a>
-                    </li>
-                </ul>
-                <!-- /.vote-list -->
-            </div>
-        </div>  <!-- /.record vote-->
+            <div class="card card-success">
+                <div class="card-header">
+                    <h3 class="card-title">Pointing Options</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body p-0">
+                    <ul class="points-list clearfix">
+                        <li>
+                            <img class="glow-img" src="~/img/1.png" id="1">
+                            <a class="users-list-name" href="#">One</a>
+                        </li>
+                        <li>
+                            <img class="glow-img" src="~/img/2.png" id="2">
+                            <a class="users-list-name" href="#">Two</a>
+                        </li>
+                        <li>
+                            <img class="glow-img" src="~/img/3.png" id="3">
+                            <a class="users-list-name" href="#">Three</a>
+                        </li>
+                        <li>
+                            <img class="glow-img" src="~/img/5.png" id="5">
+                            <a class="users-list-name" href="#">Five</a>
+                        </li>
+                        <li>
+                            <img class="glow-img" src="~/img/8.png" id="8">
+                            <a class="users-list-name" href="#">Eight</a>
+                        </li>
+                        <li>
+                            <img class="glow-img" src="~/img/100.png" id="100">
+                            <a class="users-list-name" href="#">I have no idea!</a>
+                        </li>
+                    </ul>
+                    <!-- /.vote-list -->
+                </div>
+            </div> <!-- /.record vote-->
         }
     </div>
 
@@ -111,22 +111,22 @@
                     <thead>
                         <tr>
                             <th>User</th>
-                            <th>Point</th>
+                            <th>Points</th>
                         </tr>
                     </thead>
                     <tbody id="tbodyUsers">
                         @foreach (var item in Model.Users)
                         {
-                        <tr id="@Html.DisplayFor(modelitem => item.Id)">
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                                @if (item.IsVoting)
+                            <tr id="@Html.DisplayFor(modelitem => item.Id)">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                    @if (item.IsVoting)
                                     {<small>(voter)</small>}
                                     else
                                     {<small>(observer)</small>}
-                            </td>
-                            <td><span id="@Html.DisplayFor(modelitem => item.Id)spn" class="vote-value" style="display:none">-</span></td>
-                        </tr>
+                                </td>
+                                <td><span id="@Html.DisplayFor(modelitem => item.Id)spn" class="vote-value" style="display:none">-</span></td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -143,26 +143,11 @@
     <div class="col-md-3">
         <div class="timeline">
             <!-- timeline time label -->
-            <div class="time-label"  id="divHistory">
+            <div class="time-label" id="divHistory">
                 <span class="bg-red">History</span>
             </div>
             <!-- /.timeline-label -->
-            <!-- timeline item -->
-            <div>
-                <i class="fas fa-award bg-blue"></i>
-                <div class="timeline-item">
-                    <h3 class="timeline-header">AS-12345</h3>
-                    <div class="timeline-body">
-                        3 - Sam
-                        5 - Guru
-                        3 - Mihir
-                        3 - Ani
-                        2 - Ranjith
-                    </div>
-                    <div class="timeline-footer">By: Owner</div>
-                </div>
-            </div>
-            <!-- END timeline item -->
+            <!-- timeline items are added here -->
         </div>
     </div>
 </div>
@@ -178,12 +163,12 @@
     var historyData;
 
     connection.start().then(function () {
-        document.getElementById("lblStatus").innerText = "Connected!";
+        document.getElementById("lblStatus").innerText = "Active!";
 
         if (connection.state === signalR.HubConnectionState.Connected) {
               connection.invoke('SubscribeToBoard', @Html.DisplayFor(model=>model.Id))
                 .then(function () {
-                    document.getElementById("lblStatus").innerText = "Subscribed!";
+                    document.getElementById("lblStatus").innerText = "Connected!";
                 }).catch(err => console.error(err.toString()));;
         }
     }).catch(function (err) {
@@ -201,14 +186,12 @@
     });
 
     connection.onclose(function (e) {
-         document.getElementById("lblStatus").innerText = "Connection Lost!";
+         document.getElementById("lblStatus").innerText = "Disocnnected!";
     });
 
     connection.on("UserAdded", function (user) {
         var userName = user.name;
         var tbody = document.getElementById('tbodyUsers'), row, name, type;
-
-        document.getElementById("lblStatus").innerText = "New User!";
 
         row = tbody.insertRow();
         row.id=user.id
@@ -302,7 +285,11 @@
     }
 
     function FillPieChart(data) {
-        var resultChartCanvas = $('#resultChart').get(0).getContext('2d');
+        //<canvas id="resultChart" style="min-height: 284px; height: 284px; max-height: 284px; max-width: 100%;"></canvas>
+        $('#resultChart').remove();
+        $("#chartDiv").append('<canvas id="resultChart" style="min-height: 284px; height: 284px; max-height: 284px; max-width: 100%;"></canvas>');
+        var canvas = document.querySelector('#resultChart');
+        var resultChartCanvas = canvas.getContext('2d');
         var donutOptions = {
             maintainAspectRatio: false,
             responsive: true,
@@ -335,6 +322,8 @@
         $(".vote-value").css('display', 'none');
         $(".highlight-green").removeClass("highlight-green");
         $('#divResults').hide(1000, "swing", shrinkDetails);
+        document.getElementById("txtJira").value = "";
+        document.getElementById("txtDesc").value = "";
 
         //Create History block - May need optimization. Doing it in simple JS for now.
         var newDiv = document.createElement("div");
