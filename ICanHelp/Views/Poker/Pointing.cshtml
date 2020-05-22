@@ -2,12 +2,12 @@
 
 @{
     ViewData["Title"] = "Story Pointing Table";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout_full.cshtml";
 }
 
 <div class="row">
     <!-- Left col -->
-    <div class="col-md-8">
+    <div class="col-md-6">
         <div class="row">
             <div class="col-md-12" id="divDetails">
                 <!-- Jira Details -->
@@ -16,11 +16,11 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="Jira">Jira #</label>
-                            <input type="text" name="Jira" id="txtJira" class="form-control" onkeypress="UpdateJira(this.value);" placeholder="Enter Jira Number">
+                            <input type="text" name="Jira" id="txtJira" class="form-control" onkeyup="UpdateJira(this.value);" placeholder="Enter Jira Number">
                         </div>
                         <div class="form-group">
                             <label for="Description">Description</label>
-                            <textarea class="form-control" name="Description" id="txtDesc" onkeypress="UpdateDesc(this.value);" rows="5" placeholder="Description"></textarea>
+                            <textarea class="form-control" name="Description" id="txtDesc" onkeyup="UpdateDesc(this.value);" rows="6" placeholder="Description"></textarea>
                         </div>
                         <div class="form-group">
                             <button type="button" class="btn btn-success float-left" style="margin-right: 5px;" disabled onclick="ShowVotes();">Show Votes</button>
@@ -32,10 +32,10 @@
             <div class="col-md-6" style="display: none;" id="divResults">
                 <div class="card card-success">
                     <div class="card-header">
-                        <h3 class="card-title">Result</h3>
+                        <h3 class="card-title">Report</h3>
                     </div>
                     <div class="card-body">
-                        <canvas id="resultChart" style="min-height: 262px; height: 262px; max-height: 262px; max-width: 100%;"></canvas>
+                        <canvas id="resultChart" style="min-height: 284px; height: 284px; max-height: 284px; max-width: 100%;"></canvas>
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -45,46 +45,46 @@
 
         @if (Model.CurrentUser.IsVoting)
         {
-            <div class="card card-outline">
-                <div class="card-header">
-                    <h3 class="card-title">Record Vote</h3>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body p-0">
-                    <ul class="points-list clearfix">
-                        <li>
-                            <img class="glow-img" src="~/img/1.png" id="1">
-                            <a class="users-list-name" href="#">One</a>
-                        </li>
-                        <li>
-                            <img class="glow-img" src="~/img/2.png" id="2">
-                            <a class="users-list-name" href="#">Two</a>
-                        </li>
-                        <li>
-                            <img class="glow-img" src="~/img/3.png" id="3">
-                            <a class="users-list-name" href="#">Three</a>
-                        </li>
-                        <li>
-                            <img class="glow-img" src="~/img/5.png" id="5">
-                            <a class="users-list-name" href="#">Five</a>
-                        </li>
-                        <li>
-                            <img class="glow-img" src="~/img/8.png" id="8">
-                            <a class="users-list-name" href="#">Eight</a>
-                        </li>
-                        <li>
-                            <img class="glow-img" src="~/img/100.png" id="100">
-                            <a class="users-list-name" href="#">I have no idea!</a>
-                        </li>
-                    </ul>
-                    <!-- /.vote-list -->
-                </div>
-            </div> <!-- /.record vote-->
+        <div class="card card-success">
+            <div class="card-header">
+                <h3 class="card-title">Pointing Options</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <ul class="points-list clearfix">
+                    <li>
+                        <img class="glow-img" src="~/img/1.png" id="1">
+                        <a class="users-list-name" href="#">One</a>
+                    </li>
+                    <li>
+                        <img class="glow-img" src="~/img/2.png" id="2">
+                        <a class="users-list-name" href="#">Two</a>
+                    </li>
+                    <li>
+                        <img class="glow-img" src="~/img/3.png" id="3">
+                        <a class="users-list-name" href="#">Three</a>
+                    </li>
+                    <li>
+                        <img class="glow-img" src="~/img/5.png" id="5">
+                        <a class="users-list-name" href="#">Five</a>
+                    </li>
+                    <li>
+                        <img class="glow-img" src="~/img/8.png" id="8">
+                        <a class="users-list-name" href="#">Eight</a>
+                    </li>
+                    <li>
+                        <img class="glow-img" src="~/img/100.png" id="100">
+                        <a class="users-list-name" href="#">I have no idea!</a>
+                    </li>
+                </ul>
+                <!-- /.vote-list -->
+            </div>
+        </div>  <!-- /.record vote-->
         }
     </div>
 
     <!--Right col-->
-    <div class="col-md-4">
+    <div class="col-md-3">
         <!-- About Me Box -->
         <div class="card card-primary">
             <div class="card-header">
@@ -117,16 +117,16 @@
                     <tbody id="tbodyUsers">
                         @foreach (var item in Model.Users)
                         {
-                            <tr id="@Html.DisplayFor(modelitem => item.Id)">
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                    @if (item.IsVoting)
+                        <tr id="@Html.DisplayFor(modelitem => item.Id)">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                                @if (item.IsVoting)
                                     {<small>(voter)</small>}
                                     else
                                     {<small>(observer)</small>}
-                                </td>
-                                <td><span id="@Html.DisplayFor(modelitem => item.Id)spn" class="vote-value" style="display:none">-</span></td>
-                            </tr>
+                            </td>
+                            <td><span id="@Html.DisplayFor(modelitem => item.Id)spn" class="vote-value" style="display:none">-</span></td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -140,6 +140,31 @@
         </div>
         <!-- /.card -->
     </div>
+    <div class="col-md-3">
+        <div class="timeline">
+            <!-- timeline time label -->
+            <div class="time-label"  id="divHistory">
+                <span class="bg-red">History</span>
+            </div>
+            <!-- /.timeline-label -->
+            <!-- timeline item -->
+            <div>
+                <i class="fas fa-award bg-blue"></i>
+                <div class="timeline-item">
+                    <h3 class="timeline-header">AS-12345</h3>
+                    <div class="timeline-body">
+                        3 - Sam
+                        5 - Guru
+                        3 - Mihir
+                        3 - Ani
+                        2 - Ranjith
+                    </div>
+                    <div class="timeline-footer">By: Owner</div>
+                </div>
+            </div>
+            <!-- END timeline item -->
+        </div>
+    </div>
 </div>
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
@@ -150,6 +175,7 @@
 <script>
     var connection = new signalR.HubConnectionBuilder().withUrl("/pokerhub").build();
     var connId;
+    var historyData;
 
     connection.start().then(function () {
         document.getElementById("lblStatus").innerText = "Connected!";
@@ -298,19 +324,47 @@
                  'x-conn-id': connId
                 },   url:"/api/PokerApi/NextRound/"+@Model.Id+"?userid="+@Model.CurrentUser.Id,
             success:function(response){
-                //var r = JSON.parse(response);
-                ResetPage(@Model.CurrentUser.Id);
+                ResetPage(response);
              }
          });
     }
 
-    connection.on("ResetPage", function (userid) { ResetPage(userid) });
+    connection.on("ResetPage", function (data) { ResetPage(data) });
 
-    function ResetPage(userid) {
+    function ResetPage(data) {
         $(".vote-value").css('display', 'none');
         $(".highlight-green").removeClass("highlight-green");
         $('#divResults').hide(1000, "swing", shrinkDetails);
-        document.getElementById("lblStatus").innerText = "Table cleared by user:"+userid;
+
+        //Create History block - May need optimization. Doing it in simple JS for now.
+        var newDiv = document.createElement("div");
+        $(newDiv).css('display', 'none');
+
+        var ielement = document.createElement("i");
+        ielement.className="fas fa-award bg-blue";
+        newDiv.appendChild(ielement);
+
+        var childDiv = document.createElement("div");
+        childDiv.className = "timeline-item";
+
+        var h3 = document.createElement("h3");
+        h3.className = "timeline-header";
+        h3.innerHTML =  document.getElementById("txtJira").value;
+        childDiv.appendChild(h3);
+
+        var bodyDiv = document.createElement("div");
+        bodyDiv.className = "timeline-body";
+        bodyDiv.innerHTML = data.historyBody;
+        childDiv.appendChild(bodyDiv);
+
+        var footerDiv = document.createElement("div");
+        footerDiv.className = "timeline-footer";
+        footerDiv.innerHTML = data.historyFooter;
+        childDiv.appendChild(footerDiv);
+
+        newDiv.appendChild(childDiv);
+        $(newDiv).insertAfter('#divHistory').show('slow');
+        console.log(data.extra);
     }
 
     function shrinkDetails() {

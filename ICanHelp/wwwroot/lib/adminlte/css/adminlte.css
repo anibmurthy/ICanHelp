@@ -32302,3 +32302,11 @@ table .highlight-green {
         .points-list > li > a:hover .users-list-name {
             color: #999;
         }
+
+.author-data {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    z-index: 1032;
+}

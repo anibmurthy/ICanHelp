@@ -150,25 +150,35 @@ namespace ICanHelp.Controllers
 
             PointingTable table = _cache.Get<PointingTable>(tableId);
 
+            ResetPageHistoryData resetData = new ResetPageHistoryData();
+
             foreach (var user in table.Users)
             {
-                user.Vote = 0;
+                if (user.Id == userId)
+                    resetData.HistoryFooter = "Table cleared by: " + user.Name;
+                if (user.IsVoting)
+                {
+                    resetData.HistoryBody = string.Concat(resetData.HistoryBody, "[", user.Vote, " - ", user.Name, "]");
+                    user.Vote = 0;
+                }
             }
+
             table.VotesRecorded = 0;
 
             _cache.Set(tableId, table);
+            resetData.Extra = "Table cleared";
 
             string clientId = Request.Headers["x-conn-id"];
             if (string.IsNullOrWhiteSpace(clientId))
             {
-                await _hub.Clients.Group(table.Id.ToString()).SendAsync("ResetPage", userId);
+                await _hub.Clients.Group(table.Id.ToString()).SendAsync("ResetPage", resetData);
             }
             else
             {
-                await _hub.Clients.GroupExcept(table.Id.ToString(), clientId).SendAsync("ResetPage", userId);
+                await _hub.Clients.GroupExcept(table.Id.ToString(), clientId).SendAsync("ResetPage", resetData);
             }
 
-            return Ok("Table cleared");
+            return Ok(resetData);
         }
 
         [HttpGet]
