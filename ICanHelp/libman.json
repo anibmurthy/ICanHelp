@@ -33,6 +33,10 @@
         "dist/jquery.slim.js",
         "dist/jquery.slim.min.map"
       ]
+    },
+    {
+      "library": "jquery-validation@1.19.2",
+      "destination": "wwwroot/js/jquery-validation/"
     }
   ]
 }

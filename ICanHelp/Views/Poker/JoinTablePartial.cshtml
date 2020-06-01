@@ -1,0 +1,52 @@
+﻿@model ICanHelp.Contracts.JoinTable
+
+<form asp-action="JoinTablePartial" id="jointable">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="UserName">User Name</label>
+                    <input type="text" class="form-control" name="UserName" placeholder="Enter your Name">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="TableId">Table ID</label>
+                    <input type="text" class="form-control" name="TableId" placeholder="Enter Table ID">
+                    <span asp-validation-for="TableId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="IsVoting">What will be your role at the table?</label>
+                    <!-- radio -->
+                    <div class="form-group clearfix">
+                        <div>
+                            <input type="radio" name="IsVoting" value="true">
+                            <label for="IsVoting">
+                                Voter
+                            </label>
+                        </div>
+                        <div>
+                            <input type="radio" name="IsVoting" value="false">
+                            <label for="IsVoting">
+                                Observer
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+        <div class="text-center col-sm-6">
+            <button type="submit" class="btn btn-warning float-left" style="margin-right: 5px;">Join</button>
+        </div>
+    </div>
+</form>
+
+

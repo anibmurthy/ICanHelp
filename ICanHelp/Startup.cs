@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ICanHelp.Contracts;
 using ICanHelp.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +33,8 @@ namespace ICanHelp
             {
                 swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "ICanHelp" });
             });
+
+            services.AddTransient<IPointingPokerRepository, PointingPokerRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

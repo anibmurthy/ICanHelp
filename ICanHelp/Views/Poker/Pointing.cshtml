@@ -107,7 +107,7 @@
                     </li>
                 </ul>
 
-                <table class="table">
+                <table class="table" id="tblusers">
                     <thead>
                         <tr>
                             <th>User</th>
@@ -117,16 +117,50 @@
                     <tbody id="tbodyUsers">
                         @foreach (var item in Model.Users)
                         {
-                            <tr id="@Html.DisplayFor(modelitem => item.Id)">
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                    @if (item.IsVoting)
-                                    {<small>(voter)</small>}
-                                    else
-                                    {<small>(observer)</small>}
-                                </td>
-                                <td><span id="@Html.DisplayFor(modelitem => item.Id)spn" class="vote-value" style="display:none">-</span></td>
-                            </tr>
+                            if (item.Vote > 0)
+                            {
+                                <tr id="@Html.DisplayFor(modelitem => item.Id)" class=" highlight-green">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                        @if (item.IsVoting)
+                                        {<small>(voter)</small>}
+                                        else
+                                        {<small>(observer)</small>}
+                                    </td>
+                                    <td>
+                                        @if (Model.IsComplete)
+                                        {
+                                            <span id="@Html.DisplayFor(modelitem => item.Id)spn" class="vote-value highlight-green" style="display: block">@item.Vote</span>
+                                        }
+                                        else
+                                        {
+                                            <span id="@Html.DisplayFor(modelitem => item.Id)spn" class="vote-value highlight-green" style="display: none">@item.Vote</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr id="@Html.DisplayFor(modelitem => item.Id)">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                        @if (item.IsVoting)
+                                        {<small>(voter)</small>}
+                                        else
+                                        {<small>(observer)</small>}
+                                    </td>
+                                    <td>
+                                        @if (Model.IsComplete && item.IsVoting)
+                                        {
+                                            <span id="@Html.DisplayFor(modelitem => item.Id)spn" class="vote-value highlight-green" style="display: block">@item.Vote</span>
+                                        }
+                                        else
+                                        {
+                                            <span id="@Html.DisplayFor(modelitem => item.Id)spn" class="vote-value" style="display:none">-</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>
@@ -162,6 +196,13 @@
     var connId;
     var historyData;
 
+    $(window).bind('beforeunload', function() {
+         connection.invoke('RemoveFromBoard', @Html.DisplayFor(model=>model.CurrentUser.Id))
+                .then(function () {
+                    document.getElementById("lblStatus").innerText = "Removed!";
+                }).catch(err => console.error(err.toString()));
+    });
+
     connection.start().then(function () {
         document.getElementById("lblStatus").innerText = "Active!";
 
@@ -186,7 +227,7 @@
     });
 
     connection.onclose(function (e) {
-         document.getElementById("lblStatus").innerText = "Disocnnected!";
+        document.getElementById("lblStatus").innerText = "Disconnected!";
     });
 
     connection.on("UserAdded", function (user) {
@@ -211,6 +252,12 @@
         voteSpan.value = "-";
 
         type.appendChild(voteSpan);
+    });
+
+    connection.on("UserRemoved", function (user) {
+        var row = document.getElementById(user.id);
+
+        document.getElementById("tblusers").deleteRow(row.rowIndex);
     });
 
     function UpdateJira(data) {
@@ -259,12 +306,16 @@
                      'x-conn-id': connId
                 },   url:"/api/PokerApi/Vote/"+@Model.CurrentUser.Id+"?vote="+this.id,
             success:function(response){
-                var r = JSON.parse(response);
+                console.log(response);
                 $("#@Model.CurrentUser.Id").addClass("highlight-green", 500);
+                $("#" +@Model.CurrentUser.Id+ "spn").css('display', 'block');
+                },
+            failure:function(response){
+                console.log(response);
+                alert("Something went wrong! I have recorded the log to find out more. Meantime, please retry or rejoin table as new user.");
                 }
             });
             $("#" +@Model.CurrentUser.Id+ "spn").html(this.id);
-            $("#" +@Model.CurrentUser.Id+ "spn").css('display', 'block');
         });
     });
 
@@ -359,4 +410,8 @@
     function shrinkDetails() {
          $("#divDetails").switchClass("col-md-6", "col-md-12", 1000);
     }
+
+    $(window).on("beforeunload", function () {
+        return inFormOrLink ? "Do you really want to close?" : null;
+    });
 </script>

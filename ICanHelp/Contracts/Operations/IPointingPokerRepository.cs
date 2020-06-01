@@ -7,18 +7,24 @@ namespace ICanHelp.Contracts
 {
     public interface IPointingPokerRepository
     {
-        Task<bool> CreateTable(PointingTable table);
+        Task<PointingTableDom> CreateTable(CreateTable request);
 
-        Task<bool> AddUser(Guid tableId, User user);
+        Task<PointingTableDom> AddUser(JoinTable request);
+        Task<bool> RemoveUser(int userId, string clientId);
 
-        Task<bool> DeleteUser(Guid tableId, Guid userId);
+        Task<bool> IsTableExists(int tableId);
+        Task<bool> IsUserExists(int userId);
+
+        //Task<bool> RemoveUser(Guid tableId, Guid userId);
 
         //Task<List<User>> GetUsersFromBoard(Guid boardId);
 
-        Task<bool> UpdateVote(Guid tableId, Guid userId, int point);
+        Task<bool> UpdateVote(int userId, string clientId, int points);
 
-        Task<bool> ClearVote(Guid tableId);
+        Task<ResetPageHistoryData> NextRound(int tableId, string clientId, int userId);
 
-        Task<bool> ShowVote(Guid tableId, Guid userId);
+        //Task<bool> ClearVote(Guid tableId);
+
+        //Task<bool> ShowVote(Guid tableId, Guid userId);
     }
 }

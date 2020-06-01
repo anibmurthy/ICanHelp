@@ -1,0 +1,48 @@
+﻿@model ICanHelp.Contracts.CreateTable
+
+<form asp-action="CreateTablePartial" id="createtable">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="TableName">Team Name</label>
+                    <input type="text" class="form-control" name="TableName" placeholder="Enter Team Name">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="UserName">User Name</label>
+                    <input type="text" class="form-control" name="UserName" placeholder="Enter Your Name">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="IsVoting">What will be your role at the table?</label>
+                    <!-- radio -->
+                    <div class="form-group clearfix">
+                        <div>
+                            <input type="radio" name="IsVoting" value="true">
+                            <label for="IsVoting">
+                                Voter
+                            </label>
+                        </div>
+                        <div>
+                            <input type="radio" name="IsVoting" value="false">
+                            <label for="IsVoting">
+                                Observer
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+        <div class="text-center col-sm-6">
+            <button type="submit" class="btn btn-success float-left" style="margin-right: 5px;">Create</button>
+        </div>
+    </div>
+</form>

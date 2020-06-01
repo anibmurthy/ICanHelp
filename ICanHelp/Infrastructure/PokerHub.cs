@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using ICanHelp.Contracts;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,12 @@ namespace ICanHelp.Infrastructure
 {
     public class PokerHub : Hub
     {
+        private IPointingPokerRepository _pokerRepo;
+        public PokerHub(IPointingPokerRepository pokerRepo)
+        {
+            _pokerRepo = pokerRepo;
+        }
+
         public async Task SendMessage(string user, string message)
         {
             await Clients.All.SendAsync("ReceiveMessage", user, message);
@@ -20,10 +27,9 @@ namespace ICanHelp.Infrastructure
             await Clients.Caller.SendAsync("SetConnectionId", Context.ConnectionId);
         }
 
-        public async Task RemoveFromBoard(int boardId)
+        public async Task RemoveFromBoard(int userId)
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, boardId.ToString());
-            await Clients.Caller.SendAsync("Message", "Removed from board successfully!");
+            await _pokerRepo.RemoveUser(userId, Context.ConnectionId);
         }
     }
 }

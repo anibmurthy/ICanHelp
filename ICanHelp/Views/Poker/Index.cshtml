@@ -1,4 +1,4 @@
-﻿
+﻿@model ICanHelp.Contracts.IndexViewDom
 @{
     ViewData["Title"] = "Story Pointing";
     Layout = "~/Views/Shared/_Layout_full.cshtml";
@@ -11,54 +11,9 @@
             <div class="card-header">
                 <h3 class="card-title">Join a Table</h3>
             </div>
-            <!-- /.card-header -->
-            <!-- form start -->
-            <form role="form" action="/Poker/Join" method="post">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="UserName">User Name</label>
-                                <input type="text" class="form-control" name="UserName" placeholder="Enter your Name">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="TableId">Table ID</label>
-                                <input type="text" class="form-control" name="TableId" placeholder="Enter Table ID">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label for="IsVoting">What will be your role at the table?</label>
-                                <!-- radio -->
-                                <div class="form-group clearfix">
-                                    <div>
-                                        <input type="radio" name="IsVoting" value="true">
-                                        <label for="IsVoting">
-                                            Voter
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <input type="radio" name="IsVoting" value="false">
-                                        <label for="IsVoting">
-                                            Observer
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.card-body -->
-                <div class="card-footer">
-                    <div class="text-center col-sm-6">
-                        <button type="submit" class="btn btn-warning float-left" style="margin-right: 5px;">Join</button>
-                    </div>
-                </div>
-            </form>
+            @{
+                await Html.RenderPartialAsync("JoinTablePartial", Model.joinTable, ViewData);
+            }
         </div>
         <!-- /.card -->
     </div><!-- /.join div-->
@@ -68,55 +23,102 @@
             <div class="card-header">
                 <h3 class="card-title">Create a Table</h3>
             </div>
-            <!-- /.card-header -->
-            <!-- form start -->
-            <form role="form" action="/Poker/Create" method="post">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="TableName">Team Name</label>
-                                <input type="text" class="form-control" name="TableName" placeholder="Enter Team Name">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="UserName">User Name</label>
-                                <input type="text" class="form-control" name="UserName" placeholder="Enter Your Name">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label for="IsVoting">What will be your role at the table?</label>
-                                <!-- radio -->
-                                <div class="form-group clearfix">
-                                    <div>
-                                        <input type="radio" name="IsVoting" value="true">
-                                        <label for="IsVoting">
-                                            Voter
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <input type="radio" name="IsVoting" value="false">
-                                        <label for="IsVoting">
-                                            Observer
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.card-body -->
-                <div class="card-footer">
-                    <div class="text-center col-sm-6">
-                        <button type="submit" class="btn btn-success float-left" style="margin-right: 5px;">Create</button>
-                    </div>
-                </div>
-            </form>
+            @{
+                await Html.RenderPartialAsync("CreateTablePartial", Model.createTable, ViewData);
+            }
         </div>
         <!-- /.card -->
     </div> <!-- /.create div-->
 </div>
+
+<!-- jQuery -->
+<script src="~/js/jquery/jquery.min.js"></script>
+<!-- jquery-validation -->
+<script src="~/js/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/js/jquery-validation/dist/additional-methods.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.validator.setDefaults({
+            //submitHandler: function () {
+            //    alert("Form successful submitted!");
+            //}
+        });
+        $('#createtable').validate({
+            rules: {
+                TableName: {
+                    required: true,
+                    minlength: 3,
+                },
+                UserName: {
+                    required: true,
+                    minlength: 3
+                },
+                IsVoting: {
+                    required: true
+                },
+            },
+            messages: {
+                TableName: {
+                    required: "I need a team name to create pointing table",
+                    minlength: "Too short! I need at least 3 characters"
+                },
+                UserName: {
+                    required: "I need your name so others can know it is you",
+                    minlength: "Too short! I need at least 3 characters"
+                },
+                IsVoting: "Tell me if you are voting so I can draw cards for you"
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+
+        $('#jointable').validate({
+            rules: {
+                TableId: {
+                    required: true,
+                    number: true,
+                    minlength: 5
+                },
+                UserName: {
+                    required: true,
+                    minlength: 3
+                },
+                IsVoting: {
+                    required: true
+                },
+            },
+            messages: {
+                TableId: {
+                    required: "I need to know the table you are trying to join",
+                    number: "Table Id is always a 5 digit number"
+                },
+                UserName: {
+                    required: "I need your name so others can know it is you",
+                    minlength: "Too short! I need at least 3 characters"
+                },
+                IsVoting: "Tell me if you are voting so I can draw cards for you"
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+    });
+</script>
