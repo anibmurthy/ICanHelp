@@ -1,4 +1,5 @@
-﻿using ICanHelp.Infrastructure;
+﻿using ICanHelp.Contracts;
+using ICanHelp.Infrastructure;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
 using System;
@@ -7,7 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ICanHelp.Contracts
+namespace ICanHelp.Repositories
 {
     public class PointingPokerRepository : IPointingPokerRepository
     {

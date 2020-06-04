@@ -1,0 +1,24 @@
+﻿@model ICanHelp.Contracts.RetroBoard
+
+@{
+    ViewData["Title"] = "Join a Retrospective";
+    Layout = "~/Views/Shared/_Layout_full.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-6">
+        <div class="card-footer">
+            <form action="/Retro/Join" method="get">
+                <div class="input-group">
+                    <input type="text" name="boardId" id="boardId" placeholder="Board ID" class="form-control">
+                    <span class="input-group-append">
+                        <button type="submit" class="btn btn-primary">Join</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

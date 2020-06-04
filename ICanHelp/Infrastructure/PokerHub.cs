@@ -23,7 +23,14 @@ namespace ICanHelp.Infrastructure
         public async Task SubscribeToBoard(int boardId)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, boardId.ToString());
-            await Clients.Caller.SendAsync("Message", "Added to board successfully!");
+            await Clients.Caller.SendAsync("Message", "Added to Pointing board successfully!");
+            await Clients.Caller.SendAsync("SetConnectionId", Context.ConnectionId);
+        }
+
+        public async Task SubscribeToRetro(int boardId)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, boardId.ToString());
+            await Clients.Caller.SendAsync("Message", "Added to Retrospective board successfully!");
             await Clients.Caller.SendAsync("SetConnectionId", Context.ConnectionId);
         }
 

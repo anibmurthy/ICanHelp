@@ -1,0 +1,514 @@
+﻿@model ICanHelp.Contracts.RetroBoard
+
+@{
+    ViewData["Title"] = Model.TeamName + " Retrospective" + " - " + Model.Id;
+    Layout = "~/Views/Shared/_Layout_full.cshtml";
+}
+
+<div class="row">
+    @if (Model.Column1 != null)
+    {
+        <div class="col-md-3">
+            <div class="card card-outline card-blue">
+                <div class="card-header">
+                    <h3 class="card-title">@Model.Column1.Name</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" id="btncol1">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body" id="divcol1">
+                    @foreach (var entry in Model.Column1.Comments)
+                    {
+                        <div class="small-box bg-primary" id="@entry.Id">
+                            <div class="inner">
+                                @entry.Text
+                            </div>
+                            <div class="small-box-footer">
+                                <button type="button" class="btn btn-tool save-col1" id="btncol1">
+                                    <i class="far fa-check-circle"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool edit-col1" id="btncol1">
+                                    <i class="far fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool del-col1" id="btncol1">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    <!--Comment tiles are added here-->
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    }
+    @if (Model.Column2 != null)
+    {
+        <div class="col-md-3">
+            <div class="card card-outline card-warning">
+                <div class="card-header">
+                    <h3 class="card-title">@Model.Column2.Name</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" id="btncol2">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body" id="divcol2">
+                    @foreach (var entry in Model.Column2.Comments)
+                    {
+                        <div class="small-box bg-warning" id="@entry.Id">
+                            <div class="inner">
+                                @entry.Text
+                            </div>
+                            <div class="small-box-footer">
+                                <button type="button" class="btn btn-tool save-col2" id="btncol2">
+                                    <i class="far fa-check-circle"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool edit-col2" id="btncol2">
+                                    <i class="far fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool del-col2" id="btncol2">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    <!--Comment tiles are added here-->
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    }
+    @if (Model.Column3 != null)
+    {
+        <div class="col-md-3">
+            <div class="card card-outline card-cyan">
+                <div class="card-header">
+                    <h3 class="card-title">@Model.Column3.Name</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" id="btncol3">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body" id="divcol3">
+                    @foreach (var entry in Model.Column3.Comments)
+                    {
+                        <div class="small-box bg-info" id="@entry.Id">
+                            <div class="inner">
+                                @entry.Text
+                            </div>
+                            <div class="small-box-footer">
+                                <button type="button" class="btn btn-tool save-col3" id="btncol3">
+                                    <i class="far fa-check-circle"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool edit-col3" id="btncol3">
+                                    <i class="far fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool del-col3" id="btncol3">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    <!--Comment tiles are added here-->
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    }
+    @if (Model.Column4 != null)
+    {
+        <div class="col-md-3">
+            <div class="card card-outline card-lime">
+                <div class="card-header">
+                    <h3 class="card-title">@Model.Column4.Name</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" id="btncol4">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body" id="divcol4">
+                    @foreach (var entry in Model.Column4.Comments)
+                    {
+                        <div class="small-box bg-success" id="@entry.Id">
+                            <div class="inner">
+                                @entry.Text
+                            </div>
+                            <div class="small-box-footer">
+                                <button type="button" class="btn btn-tool save-col4" id="btncol4">
+                                    <i class="far fa-check-circle"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool edit-col4" id="btncol4">
+                                    <i class="far fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool del-col4" id="btncol4">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    <!--Comment tiles are added here-->
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    }
+</div>
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<!-- jQuery -->
+<script src="~/js/jquery/jquery.min.js"></script>
+
+<script>
+    var connection = new signalR.HubConnectionBuilder().withUrl("/pokerhub").build();
+    var connId;
+
+    connection.start().then(function () {
+      //  document.getElementById("lblStatus").innerText = "Active!";
+
+        if (connection.state === signalR.HubConnectionState.Connected) {
+              connection.invoke('SubscribeToRetro', @Model.Id)
+                .then(function () {
+                    //document.getElementById("lblStatus").innerText = "Connected!";
+                    console.log("Connected");
+                }).catch(err => console.error(err.toString()));;
+        }
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
+
+    connection.on("SetConnectionId", function (data) {
+        connId = data;
+        console.log("SetConnectionId received: "+data);
+    });
+
+    connection.on("Message", function (data) {
+        console.log("Message received: "+data);
+    });
+
+    connection.onclose(function (e) {
+        console.error("Connection lost!");
+    });
+
+     connection.on("CommentAdded1", function (id, comment) {
+         console.log("Hub: CommentAdded1");
+         $("<div class=\"small-box bg-primary\""+"id="+id +">\
+                <div class=\"inner\">\
+             "+ comment+"\
+                </div>\
+                <div class=\"small-box-footer\"> \
+                    <button type =\"button\" class=\"btn btn-tool save-col1\" id=\"btncol1\"> \
+                        <i class=\"far fa-check-circle\"></i>\
+                    </button>\
+                    <button type=\"button\" class=\"btn btn-tool edit-col1\" id=\"btncol1\">\
+                        <i class=\"far fa-edit\"></i>\
+                    </button>\
+                    <button type=\"button\" class=\"btn btn-tool del-col1\" id=\"btncol1\">\
+                        <i class=\"far fa-trash-alt\"></i>\
+                    </button>\
+                </div>\
+            </div>").appendTo("#divcol1");
+     });
+
+     connection.on("CommentAdded2", function (id, comment) {
+         console.log("Hub: CommentAdded2");
+         $("<div class=\"small-box bg-warning\""+"id="+id +">\
+                <div class=\"inner\">\
+             "+ comment+"\
+                </div>\
+                <div class=\"small-box-footer\"> \
+                    <button type =\"button\" class=\"btn btn-tool save-col2\" id=\"btncol2\"> \
+                        <i class=\"far fa-check-circle\"></i>\
+                    </button>\
+                    <button type=\"button\" class=\"btn btn-tool edit-col2\" id=\"btncol2\">\
+                        <i class=\"far fa-edit\"></i>\
+                    </button>\
+                    <button type=\"button\" class=\"btn btn-tool del-col2\" id=\"btncol2\">\
+                        <i class=\"far fa-trash-alt\"></i>\
+                    </button>\
+                </div>\
+            </div>").appendTo("#divcol2");
+     });
+
+     connection.on("CommentAdded3", function (id, comment) {
+         console.log("Hub: CommentAdded3");
+         $("<div class=\"small-box bg-info\""+"id="+id +">\
+                <div class=\"inner\">\
+             "+ comment+"\
+                </div>\
+                <div class=\"small-box-footer\"> \
+                    <button type =\"button\" class=\"btn btn-tool save-col3\" id=\"btncol3\"> \
+                        <i class=\"far fa-check-circle\"></i>\
+                    </button>\
+                    <button type=\"button\" class=\"btn btn-tool edit-col3\" id=\"btncol3\">\
+                        <i class=\"far fa-edit\"></i>\
+                    </button>\
+                    <button type=\"button\" class=\"btn btn-tool del-col3\" id=\"btncol3\">\
+                        <i class=\"far fa-trash-alt\"></i>\
+                    </button>\
+                </div>\
+            </div>").appendTo("#divcol3");
+     });
+
+     connection.on("CommentAdded4", function (id, comment) {
+         console.log("Hub: CommentAdded4");
+         $("<div class=\"small-box bg-success\""+"id="+id +">\
+                <div class=\"inner\">\
+             "+ comment+"\
+                </div>\
+                <div class=\"small-box-footer\"> \
+                    <button type =\"button\" class=\"btn btn-tool save-col4\" id=\"btncol4\"> \
+                        <i class=\"far fa-check-circle\"></i>\
+                    </button>\
+                    <button type=\"button\" class=\"btn btn-tool edit-col4\" id=\"btncol4\">\
+                        <i class=\"far fa-edit\"></i>\
+                    </button>\
+                    <button type=\"button\" class=\"btn btn-tool del-col4\" id=\"btncol4\">\
+                        <i class=\"far fa-trash-alt\"></i>\
+                    </button>\
+                </div>\
+            </div>").appendTo("#divcol4");
+     });
+
+    connection.on("CommentUpdated", function (id, comment) {
+        console.log("{SignalR]CommentUpdate: " + id + " " + comment);
+        $("#"+id).find(".inner").html(comment);
+    });
+
+    $("#btncol1").click(function () {
+        $("<div class=\"small-box bg-primary\">\
+                <div class=\"inner\">\
+                    <textarea class=\"form-control\" name=\"Description\" id=\"txtDesc\" rows=\"2\" placeholder=\"Description\"></textarea>\
+                </div>\
+                <div class=\"small-box-footer\"> \
+                    <button type =\"button\" class=\"btn btn-tool save-col1\" id=\"btncol1\"> \
+                        <i class=\"far fa-check-circle\"></i>\
+                    </button>\
+                    <button type=\"button\" class=\"btn btn-tool edit-col1\" id=\"btncol1\">\
+                        <i class=\"far fa-edit\"></i>\
+                    </button>\
+                    <button type=\"button\" class=\"btn btn-tool del-col1\" id=\"btncol1\">\
+                        <i class=\"far fa-trash-alt\"></i>\
+                    </button>\
+                </div>\
+            </div>").appendTo("#divcol1");
+    });
+
+    connection.on("CommentDeleted", function (data) {
+        console.log("[SignalR]Delete: " + data);
+        $("#"+data).remove();
+    });
+
+   $(document).on("click", ".save-col1", function () {
+
+        SaveData($(this),1);
+    });
+
+    $(document).on("click", ".edit-col1", function () {
+
+        EditData($(this),1);
+    });
+
+    $(document).on("click", ".del-col1", function () {
+        var parent = $(this).parent().parent();
+        SendDelete(1, $(parent).attr('id'));
+        $(parent).remove();
+    });
+
+    //Column 2 functions:
+    $("#btncol2").click(function () {
+        $("<div class=\"small-box bg-warning\">\
+                <div class=\"inner\">\
+                    <textarea class=\"form-control\" name=\"Description\" id=\"txtDesc\" rows=\"2\" placeholder=\"Description\"></textarea>\
+                </div>\
+                <div class=\"small-box-footer\"> \
+                    <button type =\"button\" class=\"btn btn-tool save-col2\" id=\"btncol2\"> \
+                        <i class=\"far fa-check-circle\"></i>\
+                    </button>\
+                    <button type=\"button\" class=\"btn btn-tool edit-col2\" id=\"btncol2\">\
+                        <i class=\"far fa-edit\"></i>\
+                    </button>\
+                    <button type=\"button\" class=\"btn btn-tool del-col2\" id=\"btncol2\">\
+                        <i class=\"far fa-trash-alt\"></i>\
+                    </button>\
+                </div>\
+            </div>").appendTo("#divcol2");
+    });
+
+    $(document).on("click", ".save-col2", function () {
+
+        SaveData($(this),2);
+    });
+
+    $(document).on("click", ".edit-col2", function () {
+
+        EditData($(this),2);
+    });
+
+    $(document).on("click", ".del-col2", function () {
+        var parent = $(this).parent().parent();
+        SendDelete(2, $(parent).attr('id'));
+        $(parent).remove();
+    });
+
+    //Column 3 functions:
+    $("#btncol3").click(function () {
+        $("<div class=\"small-box bg-info\">\
+                <div class=\"inner\">\
+                    <textarea class=\"form-control\" name=\"Description\" id=\"txtDesc\" rows=\"2\" placeholder=\"Description\"></textarea>\
+                </div>\
+                <div class=\"small-box-footer\"> \
+                    <button type =\"button\" class=\"btn btn-tool save-col3\" id=\"btncol3\"> \
+                        <i class=\"far fa-check-circle\"></i>\
+                    </button>\
+                    <button type=\"button\" class=\"btn btn-tool edit-col3\" id=\"btncol3\">\
+                        <i class=\"far fa-edit\"></i>\
+                    </button>\
+                    <button type=\"button\" class=\"btn btn-tool del-col3\" id=\"btncol3\">\
+                        <i class=\"far fa-trash-alt\"></i>\
+                    </button>\
+                </div>\
+            </div>").appendTo("#divcol3");
+    });
+
+   $(document).on("click", ".save-col3", function () {
+
+        SaveData($(this),3);
+    });
+
+    $(document).on("click", ".edit-col3", function () {
+
+        EditData($(this),3);
+    });
+
+    $(document).on("click", ".del-col3", function () {
+        var parent = $(this).parent().parent();
+        SendDelete(3, $(parent).attr('id'));
+        $(parent).remove();
+    });
+
+    //Column 4 functions:
+    $("#btncol4").click(function () {
+        $("<div class=\"small-box bg-success\">\
+                <div class=\"inner\">\
+                    <textarea class=\"form-control\" name=\"Description\" id=\"txtDesc\" rows=\"2\" placeholder=\"Description\"></textarea>\
+                </div>\
+                <div class=\"small-box-footer\"> \
+                    <button type =\"button\" class=\"btn btn-tool save-col4\" id=\"btncol4\"> \
+                        <i class=\"far fa-check-circle\"></i>\
+                    </button>\
+                    <button type=\"button\" class=\"btn btn-tool edit-col4\" id=\"btncol4\">\
+                        <i class=\"far fa-edit\"></i>\
+                    </button>\
+                    <button type=\"button\" class=\"btn btn-tool del-col4\" id=\"btncol4\">\
+                        <i class=\"far fa-trash-alt\"></i>\
+                    </button>\
+                </div>\
+            </div>").appendTo("#divcol4");
+    });
+
+   $(document).on("click", ".save-col4", function () {
+
+        SaveData($(this),4);
+    });
+
+    $(document).on("click", ".edit-col4", function () {
+
+        EditData($(this),4);
+    });
+
+    $(document).on("click", ".del-col4", function () {
+        var parent = $(this).parent().parent();
+        SendDelete(4, $(parent).attr('id'));
+        $(parent).remove();
+    });
+
+
+    function SaveData(thisSave, column) {
+        var parent = $(thisSave).parent().parent();
+        var txt = $(parent).find("textarea");
+        var comment = $(txt).val();
+        console.log(comment);
+
+        var par = $(txt).parent();
+        $(txt).remove();
+        par.html(comment);
+
+        var divExists=$(par).parent().attr("id");
+        if (!divExists) {
+            $.ajax({
+                headers: {
+                    "Accept": "application/json",//depends on your api
+                    "Content-type": "application/x-www-form-urlencoded", //depends on your api
+                    'test-header': 'test Value',
+                    'x-conn-id': connId
+                }, url: "/api/RetroApi/AddComment/" +@Model.Id+"?column=" + column + "&comment=" + comment,
+                success: function (response) {
+                    console.log(response);
+                    $(par).parent().attr("id", response);
+                }
+            });
+        }
+        else {
+            $.ajax({
+                headers: {
+                    "Accept": "application/json",//depends on your api
+                    "Content-type": "application/x-www-form-urlencoded", //depends on your api
+                    'test-header': 'test Value',
+                    'x-conn-id': connId
+                }, url: "/api/RetroApi/EditComment/" +@Model.Id+"?column=" + column + "&commentid=" + divExists+"&comment="+comment,
+                success: function (response) {
+                    console.log(response);
+                }
+            });
+        }
+      //  $(thisSave).css("display", "none");
+    }
+
+    function EditData(thisEdit) {
+        var parent = $(thisEdit).parent().parent();
+
+        var innerDiv = $(parent).find(".inner");
+        var comment = $(innerDiv).text();
+        console.log(comment);
+        $(innerDiv).html('');
+
+        var txt = document.createElement('textarea');
+        txt.className = "form-control";
+        txt.rows = 2;
+        txt.innerText = comment;
+
+        $(txt).appendTo(innerDiv);
+        //par.html(comment);
+        //$(par).parent().attr("id", "newId");
+        //$(".save-col1").find(".far").addClass('fa-thumbs-up').removeClass("fa-check-circle");
+    }
+
+    function SendDelete(column, commentId) {
+        $.ajax({
+                headers:{
+                    "Accept":"application/json",//depends on your api
+                    "Content-type": "application/x-www-form-urlencoded", //depends on your api
+                    'test-header': 'test Value',
+                    'x-conn-id': connId
+                },   url:"/api/RetroApi/DeleteComment/"+@Model.Id+"?column="+column+"&commentId="+commentId,
+                success: function (response) {
+                    console.log(response);
+                }
+         });
+    }
+
+</script>

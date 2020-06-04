@@ -1,0 +1,502 @@
+﻿@model ICanHelp.Contracts.RetroCreate
+
+@{
+    ViewData["Title"] = "Retrospective Launcher";
+    Layout = "~/Views/Shared/_Layout_full.cshtml";
+}
+
+
+<div class="row">
+    @*Create div*@
+    <div class="col-md-6">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Create Retro board</h3>
+            </div>
+            <form asp-action="Create" id="createRetro">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="TeamName">Team Name</label>
+                                    <input type="text" class="form-control" name="TeamName" placeholder="Enter Team Name to create a board">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card card-success">
+                                <div class="card-header">
+                                    <h3 class="card-title">Define Columns</h3>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" id="btnadd">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" id="btndel">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body" id="colholder">
+                                    <!--Text boxes are added here-->
+                                </div>
+                            </div>
+                            @*<ul id="headings">
+                                    <li>What went well</li>
+                                    <li>What didn't go well</li>
+                                    <li>Action items</li>
+                                </ul>*@
+                        </div>
+                    </div>
+                </div>
+                @*/.card-body*@
+                <div class="card-footer">
+                    <div class="text-center col-sm-6">
+                        <button type="submit" class="btn btn-success float-left" style="margin-right: 5px;">Create Board</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        @*/.card*@
+    </div>  @*/.create div*@
+
+    <div class="col-md-5">
+        <div class="card-footer">
+            <form action="/Retro/Join" method="get" id="joinRetro">
+                <div class="input-group">
+                    <input type="text" name="boardId" id="boardId" placeholder="Board ID" class="form-control">
+                    <span class="input-group-append">
+                        <button type="submit" class="btn btn-primary">Join</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="~/js/jquery/jquery.min.js"></script>
+<!-- jquery-validation -->
+<script src="~/js/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/js/jquery-validation/dist/additional-methods.min.js"></script>
+
+<script>
+    var counter = 1;
+    $(document).on("click", "#btnadd", function () {
+        if (counter == 4) {
+            $($(this)).attr("disabled", "true");
+        }
+        if (counter > 1) {
+            $("#btndel").attr("disabled", "false");
+        }
+
+        $('<div class="form-group"><input type="text" name="Headings" id="Headings" placeholder="Enter Column ' + counter + ' Name" class="form-control"></div>').appendTo("#colholder");
+        $('#createRetro').rules('add', rulesObj[item]);
+        counter = counter + 1;
+    });
+
+    $(document).on("click", "#btndel", function () {
+        if (counter == 5) {
+            $("#btnadd").attr("disabled", "false");
+        }
+        if (counter == 1) {
+            $($(this)).attr("disabled", "true");
+        }
+
+        $(".card-body").find(".form-group:last").remove();
+        counter = counter - 1;
+    });
+
+    $(document).ready(function () {
+        $.validator.setDefaults({
+
+        });
+        $('#createRetro').validate({
+            rules: {
+                TeamName: {
+                    required: true,
+                    minlength: 3,
+                },
+                Headings: {
+                    required: true,
+                    minlength: 3
+                },
+            },
+            messages: {
+                TeamName: {
+                    required: "I need a team name to create retro board",
+                    minlength: "Too short! I need at least 3 characters"
+                },
+                Headings: {
+                    required: "Delete if you dont want this heading",
+                    minlength: "Too short! I need at least 3 characters"
+                }
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+
+        $('#joinRetro').validate({
+            rules: {
+                boardId: {
+                    required: true,
+                    number: true,
+                    minlength: 5
+                },
+            },
+            messages: {
+                boardId: {
+                    required: "I need to know the board you are trying to join",
+                    number: "Board Id needs to be 5 digits, if less, prepend 0s"
+                },
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+    });
+</script>
+
+@*<div class="row">
+        <div class="col-md-3">
+            <div class="card card-outline card-blue">
+                <div class="card-header">
+                    <h3 class="card-title">What went well?</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" id="btncol1">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                     /.card-tools
+                </div>
+                 /.card-header
+                <div class="card-body" id="divcol1">
+                    Comment tiles are added here
+                </div>
+                 /.card-body
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-outline card-warning">
+                <div class="card-header">
+                    <h3 class="card-title">What didn't go well?</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" id="btncol2">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                     /.card-tools
+                </div>
+                 /.card-header
+                <div class="card-body" id="divcol2">
+                    Comment tiles are added here
+                </div>
+                 /.card-body
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-outline card-cyan">
+                <div class="card-header">
+                    <h3 class="card-title">Action Items</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" id="btncol3">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                     /.card-tools
+                </div>
+                 /.card-header
+                <div class="card-body" id="divcol3">
+                    Comment tiles are added here
+                </div>
+                 /.card-body
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-outline card-lime">
+                <div class="card-header">
+                    <h3 class="card-title">Thank someone?</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" id="btncol4">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                     /.card-tools
+                </div>
+                 /.card-header
+                <div class="card-body" id="divcol4">
+                    Comment tiles are added here
+                </div>
+                 /.card-body
+            </div>
+        </div>
+    </div>*@
+
+@*<script>
+        function AddCellToColumn1() {
+
+        }
+
+        //$("#btncol1").click(function () {
+        //    var divsmBox = document.createElement('div');
+        //    var divInner = document.createElement('div');
+        //    var divfooter = document.createElement('div');
+
+        //    var i = document.createElement('i');
+        //    var txt = document.createElement('textarea');
+        //    //var btntxt = document.createElement('button');
+
+        //    divsmBox.className = "small-box bg-info";
+        //    divInner.className = "inner";
+        //    divfooter.className = "small-box-footer";
+        //    i.className = "far fa-check-circle save-col1";
+
+        //    txt.className = "form-control";
+        //    txt.rows = 2;
+        //    txt.id = "editorCol1";
+
+        //    divfooter.appendChild(i);
+
+        //    var i2 = document.createElement('i');
+        //    i2.className = "far fa-edit edit-col1";
+        //    divfooter.appendChild(i2);
+
+        //    var i3 = document.createElement('i');
+        //    i3.className = "far fa-trash-alt del-col1";
+        //    divfooter.appendChild(i3);
+
+        //    divInner.appendChild(txt);
+        //    divsmBox.appendChild(divInner);
+        //    divsmBox.appendChild(divfooter);
+
+        //    $(divsmBox).appendTo("#divcol1");
+        //});
+
+        $("#btncol1").click(function () {
+            $("<div class=\"small-box bg-primary\">\
+                    <div class=\"inner\">\
+                        <textarea class=\"form-control\" name=\"Description\" id=\"txtDesc\" rows=\"2\" placeholder=\"Description\"></textarea>\
+                    </div>\
+                    <div class=\"small-box-footer\"> \
+                        <button type =\"button\" class=\"btn btn-tool save-col1\" id=\"btncol1\"> \
+                            <i class=\"far fa-check-circle\"></i>\
+                        </button>\
+                        <button type=\"button\" class=\"btn btn-tool edit-col1\" id=\"btncol1\">\
+                            <i class=\"far fa-edit\"></i>\
+                        </button>\
+                        <button type=\"button\" class=\"btn btn-tool del-col1\" id=\"btncol1\">\
+                            <i class=\"far fa-trash-alt\"></i>\
+                        </button>\
+                    </div>\
+                </div>").appendTo("#divcol1");
+        });
+
+        $(document).on("click", ".save-col1", function () {
+
+            SaveData($(this));
+        });
+
+        $(document).on("click", ".edit-col1", function () {
+
+            EditData($(this));
+        });
+
+        $(document).on("click", ".del-col1", function () {
+            var parent = $(this).parent().parent();
+            $(parent).remove();
+        });
+
+        //Column 2 functions:
+        $("#btncol2").click(function () {
+            $("<div class=\"small-box bg-warning\">\
+                    <div class=\"inner\">\
+                        <textarea class=\"form-control\" name=\"Description\" id=\"txtDesc\" rows=\"2\" placeholder=\"Description\"></textarea>\
+                    </div>\
+                    <div class=\"small-box-footer\"> \
+                        <button type =\"button\" class=\"btn btn-tool save-col2\" id=\"btncol2\"> \
+                            <i class=\"far fa-check-circle\"></i>\
+                        </button>\
+                        <button type=\"button\" class=\"btn btn-tool edit-col2\" id=\"btncol2\">\
+                            <i class=\"far fa-edit\"></i>\
+                        </button>\
+                        <button type=\"button\" class=\"btn btn-tool del-col2\" id=\"btncol2\">\
+                            <i class=\"far fa-trash-alt\"></i>\
+                        </button>\
+                    </div>\
+                </div>").appendTo("#divcol2");
+        });
+
+        $(document).on("click", ".save-col2", function () {
+
+            SaveData($(this));
+        });
+
+        $(document).on("click", ".edit-col2", function () {
+
+            EditData($(this));
+        });
+
+        $(document).on("click", ".del-col2", function () {
+            var parent = $(this).parent().parent();
+            $(parent).remove();
+        });
+
+        //Column 3 functions:
+        $("#btncol3").click(function () {
+            $("<div class=\"small-box bg-info\">\
+                    <div class=\"inner\">\
+                        <textarea class=\"form-control\" name=\"Description\" id=\"txtDesc\" rows=\"2\" placeholder=\"Description\"></textarea>\
+                    </div>\
+                    <div class=\"small-box-footer\"> \
+                        <button type =\"button\" class=\"btn btn-tool save-col3\" id=\"btncol3\"> \
+                            <i class=\"far fa-check-circle\"></i>\
+                        </button>\
+                        <button type=\"button\" class=\"btn btn-tool edit-col3\" id=\"btncol3\">\
+                            <i class=\"far fa-edit\"></i>\
+                        </button>\
+                        <button type=\"button\" class=\"btn btn-tool del-col3\" id=\"btncol3\">\
+                            <i class=\"far fa-trash-alt\"></i>\
+                        </button>\
+                    </div>\
+                </div>").appendTo("#divcol3");
+        });
+
+        $(document).on("click", ".save-col3", function () {
+
+            SaveData($(this));
+        });
+
+        $(document).on("click", ".edit-col3", function () {
+
+            EditData($(this));
+        });
+
+        $(document).on("click", ".del-col3", function () {
+            var parent = $(this).parent().parent();
+            $(parent).remove();
+        });
+
+        //Column 4 functions:
+        $("#btncol4").click(function () {
+            $("<div class=\"small-box bg-success\">\
+                    <div class=\"inner\">\
+                        <textarea class=\"form-control\" name=\"Description\" id=\"txtDesc\" rows=\"2\" placeholder=\"Description\"></textarea>\
+                    </div>\
+                    <div class=\"small-box-footer\"> \
+                        <button type =\"button\" class=\"btn btn-tool save-col4\" id=\"btncol4\"> \
+                            <i class=\"far fa-check-circle\"></i>\
+                        </button>\
+                        <button type=\"button\" class=\"btn btn-tool edit-col4\" id=\"btncol4\">\
+                            <i class=\"far fa-edit\"></i>\
+                        </button>\
+                        <button type=\"button\" class=\"btn btn-tool del-col4\" id=\"btncol4\">\
+                            <i class=\"far fa-trash-alt\"></i>\
+                        </button>\
+                    </div>\
+                </div>").appendTo("#divcol4");
+        });
+
+        $(document).on("click", ".save-col4", function () {
+
+            SaveData($(this));
+            //var parent = $(this).parent().parent();
+            //var txt = $(parent).find("textarea");
+            //var comment = $(txt).val();
+            //console.log(comment);
+
+            //var par = $(txt).parent();
+            //$(txt).remove();
+            //par.html(comment);
+            //$(par).parent().attr("id", "newId");
+            // $(".save-col1").find(".far").addClass('fa-thumbs-up').removeClass("fa-check-circle");
+        });
+
+        function SaveData(thisSave) {
+            var parent = $(thisSave).parent().parent();
+            var txt = $(parent).find("textarea");
+            var comment = $(txt).val();
+            console.log(comment);
+
+            var par = $(txt).parent();
+            $(txt).remove();
+            par.html(comment);
+            $(par).parent().attr("id", "newId");
+        }
+
+        $(document).on("click", ".edit-col4", function () {
+
+            EditData($(this));
+        });
+
+        function EditData(thisEdit) {
+            var parent = $(thisEdit).parent().parent();
+
+            var innerDiv = $(parent).find(".inner");
+            var comment = $(innerDiv).text();
+            console.log(comment);
+            $(innerDiv).html('');
+
+            var txt = document.createElement('textarea');
+            txt.className = "form-control";
+            txt.rows = 2;
+            txt.innerText = comment;
+
+            $(txt).appendTo(innerDiv);
+            //par.html(comment);
+            //$(par).parent().attr("id", "newId");
+            //$(".save-col1").find(".far").addClass('fa-thumbs-up').removeClass("fa-check-circle");
+        }
+
+        $(document).on("click", ".del-col4", function () {
+            var parent = $(this).parent().parent();
+            $(parent).remove();
+        });
+
+    </script>*@
+
+
+@*<div class="small-box bg-info">
+        <div class="inner">
+            I am liking this content placement. If this works, it will be awesome.
+            <textarea class="form-control" name="Description" id="txtDesc" rows="2" placeholder="Description"></textarea>
+        </div>
+        <div class="small-box-footer">
+            More info
+        </div>
+    </div>*@
+
+@*<div class="card bg-primary">
+        <div class="card-header">
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" id="btncol1">
+                    <i class="far fa-check-circle"></i>
+                </button>
+                <button type="button" class="btn btn-tool" id="btncol1">
+                    <i class="far fa-edit"></i>
+                </button>
+                <button type="button" class="btn btn-tool" id="btncol1">
+                    <i class="far fa-trash-alt"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <textarea class="form-control" id="txtDesc" rows="2" placeholder="Description"></textarea>
+        </div>
+    </div>*@

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ICanHelp.Contracts;
 using ICanHelp.Infrastructure;
+using ICanHelp.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -35,6 +36,7 @@ namespace ICanHelp
             });
 
             services.AddTransient<IPointingPokerRepository, PointingPokerRepository>();
+            services.AddTransient<IRetrospectiveRepository, RetrospectiveRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

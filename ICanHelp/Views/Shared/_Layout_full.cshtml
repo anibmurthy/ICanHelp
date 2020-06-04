@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    @*<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />*@
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@ViewData["Title"] | ICanHelp</title>
@@ -13,8 +14,9 @@
     <link rel="stylesheet" href="~/js/jqueryui/jquery-ui.min.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="icon" href="~/favicon.ico" />
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini sidebar-collapse">
     <div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -46,6 +48,7 @@
             </ul>
         </nav>
         <!-- /navbar -->
+
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
@@ -82,7 +85,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/Poker/Index" disabled class="nav-link">
+                            <a href="/Retro/Index" disabled class="nav-link">
                                 <i class="nav-icon far fa-comments"></i>
                                 <p>
                                     Sprint Retro
