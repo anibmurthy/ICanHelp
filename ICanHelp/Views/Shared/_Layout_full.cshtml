@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <link rel="icon" href="~/favicon.ico" />
 </head>
-<body class="hold-transition sidebar-mini sidebar-collapse">
+<body class="hold-transition sidebar-mini sidebar-collapse" onload="PageLoad();">
     <div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -48,7 +48,6 @@
             </ul>
         </nav>
         <!-- /navbar -->
-
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
@@ -89,7 +88,7 @@
                                 <i class="nav-icon far fa-comments"></i>
                                 <p>
                                     Sprint Retro
-                                    <span class="right badge badge-danger">coming soon</span>
+                                    @*<span class="right badge badge-danger">coming soon</span>*@
                                 </p>
                             </a>
                         </li>
@@ -108,6 +107,11 @@
                         <div class="col-sm-6">
                             <h1 class="m-0 text-dark">@ViewData["Title"]</h1>
                         </div><!-- /.col -->
+                        <div class="col-sm-6" id="divCopy" style="display:none">
+                            <a class="breadcrumb float-sm-right" id="aCopy">
+                                <i class="far fa-copy"></i> Copy board
+                            </a>
+                        </div>
                     </div><!-- /.row -->
                 </div><!-- /.container-fluid -->
             </div><!-- /.content-header -->

@@ -32,12 +32,13 @@ namespace ICanHelp.Controllers
 
             return RedirectToAction("Board", new { boardId });
         }
-        
+
         //public IActionResult Join()
         //{
         //    return View();
         //}
 
+        [Route("Join/{boardId}")]
         public async Task<IActionResult> Join(int boardId)
         {
             return RedirectToAction("Board", new { boardId });

@@ -176,6 +176,10 @@
     var connection = new signalR.HubConnectionBuilder().withUrl("/pokerhub").build();
     var connId;
 
+    function PageLoad() {
+        $("#divCopy").css("display", "block");
+    }
+
     connection.start().then(function () {
       //  document.getElementById("lblStatus").innerText = "Active!";
 
@@ -440,8 +444,14 @@
     function SaveData(thisSave, column) {
         var parent = $(thisSave).parent().parent();
         var txt = $(parent).find("textarea");
-        var comment = $(txt).val();
+        var comment = $(txt).val().trim();
+      //  comment = comment.trim();
         console.log(comment);
+
+        if (!comment) {
+            //if there is nothing in the comment, there is nothing to do!
+            return;
+        }
 
         var par = $(txt).parent();
         $(txt).remove();
@@ -489,7 +499,7 @@
         var txt = document.createElement('textarea');
         txt.className = "form-control";
         txt.rows = 2;
-        txt.innerText = comment;
+        txt.innerText = comment.trim();
 
         $(txt).appendTo(innerDiv);
         //par.html(comment);
@@ -510,5 +520,25 @@
                 }
          });
     }
+
+    $('#aCopy').click(function () {
+        $.ajax({
+                headers:{
+                    "Accept":"application/json",//depends on your api
+                    "Content-type": "application/x-www-form-urlencoded", //depends on your api
+                    'test-header': 'test Value',
+                    'x-conn-id': connId
+                },   url:"/api/RetroApi/Copy/"+@Model.Id,
+                success: function (data) {
+                    console.log(data);
+                    let copyFrom = document.createElement("textarea");
+                    document.body.appendChild(copyFrom);
+                    copyFrom.textContent = data;
+                    copyFrom.select();
+                    document.execCommand("copy");
+                    copyFrom.remove();
+                }
+         });
+    });
 
 </script>

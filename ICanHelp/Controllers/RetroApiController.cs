@@ -87,5 +87,18 @@ namespace ICanHelp.Controllers
             else
                 return Ok($"Edited comment: {commentId}");
         }
+
+        [HttpGet]
+        [Route("Copy/{boardId}")]
+        public async Task<IActionResult> Copy(int boardId)
+        {
+            string result = await _retroRepo.CopyBoard(boardId);
+
+            if (string.IsNullOrWhiteSpace(result))
+                return BadRequest("Nothing to Copy");
+
+            return Ok(result);
+        }
+
     }
 }

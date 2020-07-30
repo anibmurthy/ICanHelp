@@ -15,5 +15,6 @@ namespace ICanHelp.Contracts
         Task<bool> IsBoardExists(int boardId);
         Task<bool> EditComment(string clientId, int boardId, int column, int commentId, string comment);
         //Task<bool> IsCommentExists(int boardId, int column, int commentId);
+        Task<string> CopyBoard(int boardId);
     }
 }

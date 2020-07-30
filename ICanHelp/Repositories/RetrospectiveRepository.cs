@@ -176,5 +176,60 @@ namespace ICanHelp.Repositories
 
             return true;
         }
+
+        public async Task<string> CopyBoard(int boardId)
+        {
+            string result = string.Empty;
+
+            RetroBoard board = _cache.Get<RetroBoard>(boardId);
+
+            if (board == null)
+            {
+                return "";
+            }
+
+            if (board.Column1 != null && board.Column1.Comments != null && board.Column1.Comments.Any())
+            {
+                result += board.Column1.Name + "\r\n";
+                result += "-------------------------------------------------------------------\r\n";
+                foreach (var comment in board.Column1.Comments)
+                {
+                    result += comment.Text.Trim() + "\r\n";
+                }
+                result += "\r\n";
+            }
+
+            if (board.Column2 != null && board.Column2.Comments != null && board.Column2.Comments.Any())
+            {
+                result += board.Column2.Name + "\r\n";
+                result += "-------------------------------------------------------------------\r\n";
+                foreach (var comment in board.Column2.Comments)
+                {
+                    result += comment.Text.Trim() + "\r\n";
+                }
+                result += "\r\n";
+            }
+            if (board.Column3 != null && board.Column3.Comments != null && board.Column3.Comments.Any())
+            {
+                result += board.Column3.Name + "\r\n";
+                result += "-------------------------------------------------------------------\r\n";
+                foreach (var comment in board.Column3.Comments)
+                {
+                    result += comment.Text.Trim() + "\r\n";
+                }
+                result += "\r\n";
+            }
+            if (board.Column4 != null && board.Column4.Comments != null && board.Column4.Comments.Any())
+            {
+                result += board.Column4.Name + "\r\n";
+                result += "-------------------------------------------------------------------\r\n";
+                foreach (var comment in board.Column4.Comments)
+                {
+                    result += comment.Text.Trim() + "\r\n";
+                }
+                result += "\r\n";
+            }
+            return result;
+        }
     }
 }
