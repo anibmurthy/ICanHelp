@@ -38,7 +38,8 @@ namespace ICanHelp.Controllers
         //    return View();
         //}
 
-        [Route("Join/{boardId}")]
+        //[Route("Join/{boardId}")]
+        [HttpGet]
         public async Task<IActionResult> Join(int boardId)
         {
             return RedirectToAction("Board", new { boardId });
@@ -48,6 +49,8 @@ namespace ICanHelp.Controllers
         public async Task<IActionResult> Board(int boardId)
         {
             RetroBoard board = await _retroRepo.GetBoard(boardId);
+            if (board == null)
+                return RedirectToAction("Error", "Home");
             return View("Board", board);
         }
     }
