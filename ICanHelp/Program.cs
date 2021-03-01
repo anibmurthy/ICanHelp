@@ -21,7 +21,7 @@ namespace ICanHelp
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://ani-ent-01:5000", "http://localhost:5000");
+                    //webBuilder.UseUrls("http://ani-ent-01:5000", "http://localhost:5000");
                 });
     }
 }

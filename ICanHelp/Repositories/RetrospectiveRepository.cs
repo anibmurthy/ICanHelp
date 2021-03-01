@@ -2,6 +2,7 @@
 using ICanHelp.Infrastructure;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,21 +14,23 @@ namespace ICanHelp.Repositories
     {
         private IMemoryCache _cache;
         private IHubContext<PokerHub> _hub;
+        private SQLiteDBContext _sqlLite;
 
-        public RetrospectiveRepository(IMemoryCache cache, IHubContext<PokerHub> hub)
+        public RetrospectiveRepository(IMemoryCache cache, IHubContext<PokerHub> hub, SQLiteDBContext sqlite)
         {
             _cache = cache;
             _hub = hub;
+            _sqlLite = sqlite;
         }
         public async Task<int> CreateRetroBoard(RetroCreate request)
         {
             RetroBoard board = new RetroBoard();
 
             Random rnd = new Random();
-            board.Id = rnd.Next(0, 99999);
+            board.Id = rnd.Next(10000, 99999);
             while (await IsBoardExists(board.Id))
             {
-                board.Id = rnd.Next(0, 99999);
+                board.Id = rnd.Next(10000, 99999);
             }
 
             board.TeamName = request.TeamName;
@@ -50,23 +53,35 @@ namespace ICanHelp.Repositories
                 board.Column4 = new Heading("Thank someone?");
             }
 
-            _cache.Set(board.Id, board);
+            //_cache.Set(board.Id, board);
+            // Temporary work
+            SQLiteBridge bridge = new SQLiteBridge();
+            bridge.Id = board.Id;
+            bridge.Data = JsonConvert.SerializeObject(board);
+            _sqlLite.Add(bridge);
+            _sqlLite.SaveChanges();
 
             return board.Id;
         }
 
         public async Task<RetroBoard> GetBoard(int boardId)
         {
-            RetroBoard board = _cache.Get<RetroBoard>(boardId);
+            // Temporary work
+            SQLiteBridge bridge = _sqlLite.Board.Select(b => b).Where(e => e.Id == boardId).FirstOrDefault();
+
+            if (bridge == null || string.IsNullOrWhiteSpace(bridge.Data))
+                return null;
+            
+            RetroBoard board = JsonConvert.DeserializeObject<RetroBoard>(bridge.Data);
 
             return board;
         }
 
         public async Task<bool> IsBoardExists(int boardId)
         {
-            RetroBoard board = _cache.Get<RetroBoard>(boardId);
+            SQLiteBridge bridge = _sqlLite.Board.Select(b => b).Where(e => e.Id == boardId).FirstOrDefault();
 
-            if (board != null)
+            if (bridge != null)
                 return true;
             else
                 return false;
@@ -74,12 +89,13 @@ namespace ICanHelp.Repositories
 
         public async Task<bool> DeleteComment(string clientId, int boardId, int column, int commentId)
         {
-            RetroBoard board = _cache.Get<RetroBoard>(boardId);
+            // Temporary work
+            SQLiteBridge bridge = _sqlLite.Board.Select(b => b).Where(e => e.Id == boardId).FirstOrDefault();
 
-            if (board == null)
-            {
+            if (bridge == null || string.IsNullOrWhiteSpace(bridge.Data))
                 return false;
-            }
+
+            RetroBoard board = JsonConvert.DeserializeObject<RetroBoard>(bridge.Data);
 
             switch (column)
             {
@@ -97,7 +113,13 @@ namespace ICanHelp.Repositories
                     break;
             }
 
-            _cache.Set(board.Id, board);
+            //_cache.Set(board.Id, board);
+            // Temporary work
+            //SQLiteBridge bridge = new SQLiteBridge();
+            bridge.Id = board.Id;
+            bridge.Data = JsonConvert.SerializeObject(board);
+            _sqlLite.Update(bridge);
+            _sqlLite.SaveChanges();
             await _hub.Clients.GroupExcept(board.Id.ToString(), clientId).SendAsync("CommentDeleted", commentId);
 
             return true;
@@ -105,12 +127,13 @@ namespace ICanHelp.Repositories
 
         public async Task<int> AddComment(string clientId, int boardId, int column, string comment)
         {
-            RetroBoard board = _cache.Get<RetroBoard>(boardId);
+            // Temporary work
+            SQLiteBridge bridge = _sqlLite.Board.Select(b => b).Where(e => e.Id == boardId).FirstOrDefault();
 
-            if (board == null)
-            {
+            if (bridge == null || string.IsNullOrWhiteSpace(bridge.Data))
                 return 0;
-            }
+
+            RetroBoard board = JsonConvert.DeserializeObject<RetroBoard>(bridge.Data);
 
             Random rnd = new Random();
             int id = rnd.Next(0, 999);
@@ -118,36 +141,43 @@ namespace ICanHelp.Repositories
             switch (column)
             {
                 case 1:
-                    board.Column1.Comments.Add(new Comment { Id = id, Text = comment });
+                    board.Column1.Comments.Add(new Comment { Id = id, Text = comment, HeadingId = board.Column1.HeadingId });
                     await _hub.Clients.GroupExcept(board.Id.ToString(), clientId).SendAsync("CommentAdded1", id, comment);
                     break;
                 case 2:
-                    board.Column2.Comments.Add(new Comment { Id = id, Text = comment });
+                    board.Column2.Comments.Add(new Comment { Id = id, Text = comment, HeadingId = board.Column2.HeadingId });
                     await _hub.Clients.GroupExcept(board.Id.ToString(), clientId).SendAsync("CommentAdded2", id, comment);
                     break;
                 case 3:
-                    board.Column3.Comments.Add(new Comment { Id = id, Text = comment });
+                    board.Column3.Comments.Add(new Comment { Id = id, Text = comment, HeadingId = board.Column3.HeadingId });
                     await _hub.Clients.GroupExcept(board.Id.ToString(), clientId).SendAsync("CommentAdded3", id, comment);
                     break;
                 case 4:
-                    board.Column4.Comments.Add(new Comment { Id = id, Text = comment });
+                    board.Column4.Comments.Add(new Comment { Id = id, Text = comment, HeadingId = board.Column4.HeadingId });
                     await _hub.Clients.GroupExcept(board.Id.ToString(), clientId).SendAsync("CommentAdded4", id, comment);
                     break;
             }
 
-            _cache.Set(board.Id, board);
+            //_cache.Set(board.Id, board);
+            // Temporary work
+            //SQLiteBridge bridge = new SQLiteBridge();
+            bridge.Id = board.Id;
+            bridge.Data = JsonConvert.SerializeObject(board);
+            _sqlLite.Update(bridge);
+            _sqlLite.SaveChanges();
 
             return id;
         }
 
         public async Task<bool> EditComment(string clientId, int boardId, int column, int commentId, string comment)
         {
-            RetroBoard board = _cache.Get<RetroBoard>(boardId);
+            // Temporary work
+            SQLiteBridge bridge = _sqlLite.Board.Select(b => b).Where(e => e.Id == boardId).FirstOrDefault();
 
-            if (board == null)
-            {
+            if (bridge == null || string.IsNullOrWhiteSpace(bridge.Data))
                 return false;
-            }
+
+            RetroBoard board = JsonConvert.DeserializeObject<RetroBoard>(bridge.Data);
 
             Comment data = new Comment();
 
@@ -171,7 +201,14 @@ namespace ICanHelp.Repositories
                     break;
             }
 
-            _cache.Set(board.Id, board);
+            //_cache.Set(board.Id, board);
+            // Temporary work
+            //SQLiteBridge bridge = new SQLiteBridge();
+            bridge.Id = board.Id;
+            bridge.Data = JsonConvert.SerializeObject(board);
+            _sqlLite.Update(bridge);
+            _sqlLite.SaveChanges();
+
             await _hub.Clients.GroupExcept(board.Id.ToString(), clientId).SendAsync("CommentUpdated", commentId, comment);
 
             return true;
@@ -181,12 +218,13 @@ namespace ICanHelp.Repositories
         {
             string result = string.Empty;
 
-            RetroBoard board = _cache.Get<RetroBoard>(boardId);
+            // Temporary work
+            SQLiteBridge bridge = _sqlLite.Board.Select(b => b).Where(e => e.Id == boardId).FirstOrDefault();
 
-            if (board == null)
-            {
-                return "";
-            }
+            if (bridge == null || string.IsNullOrWhiteSpace(bridge.Data))
+                return "There is nothing to copy!";
+
+            RetroBoard board = JsonConvert.DeserializeObject<RetroBoard>(bridge.Data);
 
             if (board.Column1 != null && board.Column1.Comments != null && board.Column1.Comments.Any())
             {

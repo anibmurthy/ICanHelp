@@ -7,6 +7,7 @@ using ICanHelp.Infrastructure;
 using ICanHelp.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +28,9 @@ namespace ICanHelp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddDbContext<SQLiteDBContext>(
+                options => options.UseSqlite(Configuration.GetConnectionString("conn")));
 
             services.AddSignalR();
 
@@ -56,20 +60,21 @@ namespace ICanHelp
 
             app.UseRouting();
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ICanHelp");
+            });
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapHub<PokerHub>("/pokerhub");
-            });
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ICanHelp");
+                    pattern: "{controller=Home}/{action=Index}/{id?}",
+                    defaults: new { controller = "Home", action = "Index", });
+                    endpoints.MapHub<PokerHub>("/pokerhub");
             });
         }
     }

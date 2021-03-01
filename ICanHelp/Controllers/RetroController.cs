@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ICanHelp.Contracts;
+using ICanHelp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -12,12 +13,14 @@ namespace ICanHelp.Controllers
     {
         private IMemoryCache _cache;
         private IRetrospectiveRepository _retroRepo;
+        private SQLiteDBContext _sqlLite;
         //private IHubContext<PokerHub> _hub;
         //private IPointingPokerRepository _pokerRepo;
-        public RetroController(IMemoryCache cache, IRetrospectiveRepository retroRepo)
+        public RetroController(IMemoryCache cache, IRetrospectiveRepository retroRepo, SQLiteDBContext sqlite)
         {
             _cache = cache;
             _retroRepo = retroRepo;
+            _sqlLite = sqlite;
         }
 
         public IActionResult Index()
@@ -38,7 +41,8 @@ namespace ICanHelp.Controllers
         //    return View();
         //}
 
-        [Route("Join/{boardId}")]
+        //[Route("Join/{boardId}")]
+        [HttpGet]
         public async Task<IActionResult> Join(int boardId)
         {
             return RedirectToAction("Board", new { boardId });
@@ -48,6 +52,9 @@ namespace ICanHelp.Controllers
         public async Task<IActionResult> Board(int boardId)
         {
             RetroBoard board = await _retroRepo.GetBoard(boardId);
+
+            if (board == null)
+                return RedirectToAction("Error", "Home");
             return View("Board", board);
         }
     }

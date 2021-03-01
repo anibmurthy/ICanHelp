@@ -1,0 +1,42 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "@microsoft/signalr@latest",
+      "destination": "wwwroot/js/signalr",
+      "files": [
+        "dist/browser/signalr.js",
+        "dist/browser/signalr.min.js"
+      ]
+    },
+    {
+      "library": "jqueryui@1.11.1",
+      "destination": "wwwroot/js/jqueryui/",
+      "files": [
+        "jquery-ui.css",
+        "jquery-ui.min.css",
+        "jquery-ui.min.js",
+        "jquery-ui.js",
+        "jquery-ui.theme.min.css",
+        "jquery-ui.structure.min.css"
+      ]
+    },
+    {
+      "library": "jquery@3.5.1",
+      "destination": "wwwroot/js/jquery/",
+      "files": [
+        "dist/jquery.min.js",
+        "dist/jquery.js",
+        "dist/jquery.slim.min.js",
+        "dist/jquery.min.map",
+        "dist/jquery.slim.js",
+        "dist/jquery.slim.min.map"
+      ]
+    },
+    {
+      "library": "jquery-validation@1.19.2",
+      "destination": "wwwroot/js/jquery-validation/"
+    }
+  ]
+}
