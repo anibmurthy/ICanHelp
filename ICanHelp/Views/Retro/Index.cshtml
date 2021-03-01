@@ -6,127 +6,73 @@
 }
 
 
-    <div class="row">
-        @*Create div*@
-        <div class="col-md-4">
-            <div class="card card-warning">
-                <div class="card-header">
-                    <h3 class="card-title">Create Retro board</h3>
-                </div>
-                <form asp-action="Create" id="createRetro">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <label for="TeamName">Team Name</label>
-                                        <input type="text" class="form-control" name="TeamName" placeholder="Enter Team Name">
-                                    </div>
+<div class="row">
+    @*Create div*@
+    <div class="col-md-6">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Create Retro board</h3>
+            </div>
+            <form asp-action="Create" id="createRetro">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="TeamName">Team Name</label>
+                                    <input type="text" class="form-control" name="TeamName" placeholder="Enter Team Name to create a board">
                                 </div>
                             </div>
-                            @*<div class="col-sm-6">
-                                <div class="card card-success">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Define Columns</h3>
-                                        <div class="card-tools">
-                                            <button type="button" class="btn btn-tool" id="btnadd">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-tool" id="btndel">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="card-body" id="colholder">
-                                        Text boxes are added here
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card card-success">
+                                <div class="card-header">
+                                    <h3 class="card-title">Define Columns</h3>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" id="btnadd">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" id="btndel">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
                                     </div>
                                 </div>
-                                <ul id="headings">
-                                        <li>What went well</li>
-                                        <li>What didn't go well</li>
-                                        <li>Action items</li>
-                                    </ul>
-                            </div>*@
-                        </div>
-                    </div>
-                    @*/.card-body*@
-                    <div class="card-footer">
-                        <div class="text-center col-sm-6">
-                            <button type="submit" class="btn btn-success float-left" style="margin-right: 5px;">Create Board</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            @*/.card*@
-        </div>  @*/.create div*@
-
-        <div class="col-md-4">
-            <div class="card card-primary">
-                <div class="card-header">
-                    <h3 class="card-title">Join Retro board</h3>
-                </div>
-                <form action="/Retro/Join" method="get" id="joinRetro">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <label for="TeamName">Board Number</label>
-                                        <input type="text" class="form-control" name="boardId" id="boardId" placeholder="Board Number">
-                                    </div>
+                                <div class="card-body" id="colholder">
+                                    <!--Text boxes are added here-->
                                 </div>
                             </div>
-                            @*<div class="col-sm-6">
-                                <div class="card card-success">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Define Columns</h3>
-                                        <div class="card-tools">
-                                            <button type="button" class="btn btn-tool" id="btnadd">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-tool" id="btndel">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="card-body" id="colholder">
-                                        Text boxes are added here
-                                    </div>
-                                </div>
-                                <ul id="headings">
-                                        <li>What went well</li>
-                                        <li>What didn't go well</li>
-                                        <li>Action items</li>
-                                    </ul>
-                            </div>*@
+                            @*<ul id="headings">
+                                    <li>What went well</li>
+                                    <li>What didn't go well</li>
+                                    <li>Action items</li>
+                                </ul>*@
                         </div>
                     </div>
-                    @*/.card-body*@
-                    <div class="card-footer">
-                        <div class="text-center col-sm-6">
-                            <button type="submit" class="btn btn-success float-left" style="margin-right: 5px;">Join</button>
-                        </div>
+                </div>
+                @*/.card-body*@
+                <div class="card-footer">
+                    <div class="text-center col-sm-6">
+                        <button type="submit" class="btn btn-success float-left" style="margin-right: 5px;">Create Board</button>
                     </div>
-                </form>
-            </div>
-            @*/.card*@
-        </div>  @*/.create div*@
+                </div>
+            </form>
+        </div>
+        @*/.card*@
+    </div>  @*/.create div*@
 
-        <div class="col-md-4"></div>
-
-        @*<div class="col-md-5">
-            <div class="card-footer">
-                <form action="/Retro/Join" method="get" id="joinRetro">
-                    <div class="input-group">
-                        <input type="text" name="boardId" id="boardId" placeholder="Board ID" class="form-control">
-                        <span class="input-group-append">
-                            <button type="submit" class="btn btn-primary">Join</button>
-                        </span>
-                    </div>
-                </form>
-            </div>
-        </div>*@
+    <div class="col-md-5">
+        <div class="card-footer">
+            <form action="/Retro/Join" method="get" id="joinRetro">
+                <div class="input-group">
+                    <input type="text" name="boardId" id="boardId" placeholder="Board ID" class="form-control">
+                    <span class="input-group-append">
+                        <button type="submit" class="btn btn-primary">Join</button>
+                    </span>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
 
 <!-- jQuery -->
 <script src="~/js/jquery/jquery.min.js"></script>
